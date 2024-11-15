@@ -28,6 +28,12 @@ class objPos
         char getSymbolIfPosEqual(const objPos* refPos) const;
         
         bool isPosEqual(const objPos* refPos) const;
+
+        //Copy assignment operator
+        objPos &operator=(const objPos &copy);
+
+        //Copy constructor
+        objPos(const objPos &copy);
 };
 
 #endif
