@@ -18,6 +18,8 @@ class Player
         enum Dir {UP, DOWN, LEFT, RIGHT, STOP};  // This is the direction state
 
         Player(GameMechs* thisGMRef);
+
+        //Creation of destructor member function for player
         ~Player();
 
         objPos getPlayerPos() const; // Upgrade this in iteration 3.       
@@ -29,6 +31,7 @@ class Player
     private:
         objPos playerPos; // Upgrade this in iteration 3.       
         enum Dir myDir;
+        char player_move = 0;
 
         // Need a reference to the Main Game Mechanisms
         GameMechs* mainGameMechsRef;

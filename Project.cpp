@@ -55,7 +55,7 @@ void RunLogic(void)
 
 void DrawScreen(void)
 {
-    MacUILib_clearScreen();    
+
 }
 
 void LoopDelay(void)
