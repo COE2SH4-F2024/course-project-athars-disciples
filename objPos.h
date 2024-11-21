@@ -16,6 +16,7 @@ class objPos
 
         objPos();
         objPos(int xPos, int yPos, char sym);
+
         
         // Respect the rule of six / minimum four
         // [TODO] Implement the missing special member functions to meet the minimum four rule
@@ -34,6 +35,7 @@ class objPos
 
         //Copy constructor
         objPos(const objPos &copy);
+        ~objPos();
 };
 
 #endif

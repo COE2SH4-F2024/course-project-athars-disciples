@@ -38,7 +38,7 @@ objPos::objPos(const objPos &copy)
 
 objPos::~objPos()
 {
-    delete[] pos;
+    delete pos;
 }
 
 
