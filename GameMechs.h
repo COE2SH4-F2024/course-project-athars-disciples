@@ -28,7 +28,7 @@ class GameMechs
         ~GameMechs(); // is this one needed at all? Why or why not?
         
         bool getExitFlagStatus() const; 
-        void setExitTrue();
+        void setExit(bool value);
         bool getLoseFlagStatus() const;
         void setLoseFlag();
 

@@ -5,66 +5,21 @@ GameMechs::GameMechs()
 {
     boardSizeX = 20;
     boardSizeY = 10;
-    //Defining board
-    for(int y = 0; y<boardSizeY; y++)
-    {
-        for(int x = 0; x<boardSizeX; x++)
-        {
-            
-            /*if(x == position.x && y == position.y)
-            {
-                MacUILib_printf("%c", position.symbol);
-            }
-            */
-            if(y==0||x==0||x==(boardSizeX-1)||y==(boardSizeY-1))
-            {
-                MacUILib_printf("#");
-            }
-           
-            else
-            {
-                MacUILib_printf(" ");
-            }
-
-        }
-
-        MacUILib_printf("\n");
-        
-    }
-    MacUILib_clearScreen();    
+    score = 0;
+    exitFlag = false;
+    loseFlag = false;
 }
 
 GameMechs::GameMechs(int boardX, int boardY)
 {
     boardSizeX = boardX;
     boardSizeY = boardY;
+    score = 0;
+    exitFlag = false;
+    loseFlag = false;
+
     //Defining board
-    for(int y = 0; y<boardSizeY; y++)
-    {
-        for(int x = 0; x<boardSizeX; x++)
-        {
-            
-            /*if(x == position.x && y == position.y)
-            {
-                MacUILib_printf("%c", position.symbol);
-            }
-            */
-            if(y==0||x==0||x==(boardSizeX-1)||y==(boardSizeY-1))
-            {
-                MacUILib_printf("#");
-            }
-           
-            else
-            {
-                MacUILib_printf(" ");
-            }
 
-        }
-
-        MacUILib_printf("\n");
-        
-    }
-    MacUILib_clearScreen();    
 }
 
 // do you need a destructor?
@@ -94,40 +49,46 @@ int GameMechs::getScore() const
     return score;
 }
 
+
 void GameMechs::incrementScore()
 {
-    
+    score++;
 }
 
 int GameMechs::getBoardSizeX() const
 {
-
+    return boardSizeX;
 }
 
 int GameMechs::getBoardSizeY() const
 {
-
+    return boardSizeY;
 }
 
 
-void GameMechs::setExitTrue()
+void GameMechs::setExit(bool value)
 {
-
+    if(value)
+        exitFlag = true;
+    
+    else if(!value)
+        exitFlag = false;
+    
 }
 
 void GameMechs::setLoseFlag()
 {
-    
+    loseFlag = true;
 }
 
 void GameMechs::setInput(char this_input)
 {
-
+    input = this_input;
 }
 
 void GameMechs::clearInput()
 {
-
+    input = '\0';
 }
 
 // More methods should be added here
