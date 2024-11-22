@@ -7,7 +7,7 @@ using namespace std;
 
 #define DELAY_CONST 50000
 
-GameMechs gamemechanics = GameMechs(30, 30);
+GameMechs gamemechanics = GameMechs();
 Player playercharacter(&gamemechanics); 
 
 
