@@ -1,4 +1,5 @@
 #include "objPosArrayList.h"
+#include <iostream>
 
 // Paste your Tested implementation here.
 // Paste your Tested implementation here.
@@ -7,10 +8,18 @@
 objPosArrayList::objPosArrayList()
 {
     arrayCapacity = 200;
-    listSize = 0;
+    listSize = 3;
     aList = new objPos[arrayCapacity];
-    
+
+    for(int i = 0; i<listSize; i++)
+    {
+        int index2 = 10+i;
+        aList[i].setObjPos(10, index2, '*');
+    }
+        
 }
+
+
 
 objPosArrayList::~objPosArrayList()
 {
@@ -29,12 +38,12 @@ void objPosArrayList::insertHead(objPos thisPos)
         adjustArraySize();
     }
 
-    listSize++;
-
-    for(int i = listSize-1; i>0; i--)
+    for(int i = listSize; i>0; i--)
         aList[i] = aList[i-1];
     
-    aList[0].setObjPos(thisPos.pos->x, thisPos.pos->y, '@');
+    listSize++;
+    
+    aList[0].setObjPos(thisPos.pos->x, thisPos.pos->y, '*');
 }
 
 void objPosArrayList::insertTail(objPos thisPos)
@@ -45,7 +54,7 @@ void objPosArrayList::insertTail(objPos thisPos)
     }
     
     listSize++;
-    aList[listSize].setObjPos(thisPos.pos->x, thisPos.pos->y, '@');
+    aList[listSize-1].setObjPos(thisPos.pos->x, thisPos.pos->y, '*');
 }
 
 void objPosArrayList::removeHead()
@@ -71,13 +80,19 @@ objPos objPosArrayList::getHeadElement() const
 
 objPos objPosArrayList::getTailElement() const
 {
-    return aList[listSize];
+    return aList[listSize-1];
 }
 
 objPos objPosArrayList::getElement(int index) const
 {
+    if (index < 0 || index >= listSize) {
+        throw std::out_of_range("Out of range index\n");
+    }
+
     return aList[index];
 }
+
+
 
 void objPosArrayList::adjustArraySize()
 {

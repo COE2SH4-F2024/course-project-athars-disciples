@@ -6,14 +6,15 @@
 
 using namespace std;
 
+//Note: This is not part of the project and only serves to make the game more playable. Please disregard
 void HideCursor() {
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE); // Get console handle
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE); 
     CONSOLE_CURSOR_INFO cursorInfo;
 
     // Get the current cursor info
     if (GetConsoleCursorInfo(hConsole, &cursorInfo)) {
-        cursorInfo.bVisible = FALSE; // Hide the cursor
-        SetConsoleCursorInfo(hConsole, &cursorInfo);    // Apply the changes
+        cursorInfo.bVisible = FALSE; 
+        SetConsoleCursorInfo(hConsole, &cursorInfo);    
     } else {
         printf("Failed to get console cursor info.\n");
     }
@@ -25,6 +26,7 @@ void HideCursor() {
 
 GameMechs *gamemechanics = new GameMechs();
 Player playercharacter(gamemechanics); 
+
 
 
 void Initialize(void);
@@ -57,7 +59,6 @@ int main(void)
 void Initialize(void)
 {
     gamemechanics->setExit(false);
-    playercharacter.setSymbol('@');
     HideCursor();
     //ShowCursor(false);
     MacUILib_init();   
@@ -86,6 +87,42 @@ void RunLogic(void)
         gamemechanics->setLoseFlag();
     }
 
+    if(gamemechanics->getInput() == '+')
+    {
+        gamemechanics->incrementScore();
+        objPos newPosition;
+
+        if(playercharacter.getPlayerDir() == Player::RIGHT)
+        {
+            newPosition.pos->x = playercharacter.getPlayerPos()->getHeadElement().pos->x + 1;
+            newPosition.pos->y = playercharacter.getPlayerPos()->getHeadElement().pos->y;
+            newPosition.symbol = '*';
+        }
+
+        else if(playercharacter.getPlayerDir() == Player::LEFT)
+        {
+            newPosition.pos->x = playercharacter.getPlayerPos()->getHeadElement().pos->x - 1;
+            newPosition.pos->y = playercharacter.getPlayerPos()->getHeadElement().pos->y;
+            newPosition.symbol = '*';
+        }
+
+        else if(playercharacter.getPlayerDir() == Player::UP|| playercharacter.getPlayerDir() == Player::STOP)
+        {
+            newPosition.pos->x = playercharacter.getPlayerPos()->getHeadElement().pos->x;
+            newPosition.pos->y = playercharacter.getPlayerPos()->getHeadElement().pos->y-1;
+            newPosition.symbol = '*';
+        }
+
+        else if(playercharacter.getPlayerDir() == Player::DOWN)
+        {
+            newPosition.pos->x = playercharacter.getPlayerPos()->getHeadElement().pos->x;
+            newPosition.pos->y = playercharacter.getPlayerPos()->getHeadElement().pos->y+1;
+            newPosition.symbol = '*';
+        }
+
+        playercharacter.getPlayerPos()->insertHead(newPosition);
+    }
+
     if(gamemechanics->getInput() != 0 && gamemechanics->getInput() != ' ')
     {
         playercharacter.updatePlayerDir();
@@ -95,6 +132,22 @@ void RunLogic(void)
     playercharacter.movePlayer();
     gamemechanics->clearInput(); 
 
+    for(int i = 0; i<playercharacter.getPlayerPos()->getSize(); i++)
+    {
+        for(int j = 0; j<playercharacter.getPlayerPos()->getSize(); j++)
+        {
+            if(i!=j)
+            {
+                if((playercharacter.getPlayerPos()->getElement(i).pos->x == playercharacter.getPlayerPos()->getElement(j).pos->x) 
+                && (playercharacter.getPlayerPos()->getElement(i).pos->y == playercharacter.getPlayerPos()->getElement(j).pos->y))
+                {
+                    gamemechanics->setExit(true);
+                    gamemechanics->setLoseFlag();
+                }
+            }
+        }
+    }
+
 }
 
 void DrawScreen(void)
@@ -103,27 +156,38 @@ void DrawScreen(void)
 
     int boardSizeY = gamemechanics->getBoardSizeY();
     int boardSizeX = gamemechanics->getBoardSizeX();
-    int player_x = playercharacter.getPlayerPos().pos->x;
-    int player_y = playercharacter.getPlayerPos().pos->y;
-    char symbol = playercharacter.getSymbol();
+    bool object_printed = false;
     
+
+    MacUILib_printf("\nUse the WASD Keys to navigate and spacebar to exit\n");
+    
+    if(playercharacter.getPlayerDir() == Player::STOP)
+    {
+        MacUILib_printf("Click any WASD key to start\n");
+    }
 
     for(int y = 0; y<boardSizeY; y++)
     {
         for(int x = 0; x<boardSizeX; x++)
         {
+            object_printed = false; 
             
-            if(x == player_x && y == player_y)
+            for(int j = 0; j<playercharacter.getPlayerPos()->getSize(); j++)
             {
-                MacUILib_printf("%c", symbol);
+                if((playercharacter.getPlayerPos()->getElement(j).pos->x == x) && (playercharacter.getPlayerPos()->getElement(j).pos->y == y))
+                {
+                    MacUILib_printf("%c",playercharacter.getPlayerPos()->getElement(j).getSymbol());
+                    object_printed = true; 
+
+                }
             }
             
-            else if(y==0||x==0||x==(boardSizeX-1)||y==(boardSizeY-1))
+            if((y==0||x==0||x==(boardSizeX-1)||y==(boardSizeY-1)) && !object_printed)
             {
                 MacUILib_printf("#");
             }
            
-            else
+            else if(!object_printed)
             {
                 MacUILib_printf(" ");
             }
@@ -133,21 +197,23 @@ void DrawScreen(void)
         MacUILib_printf("\n");
         
     }
+
+    MacUILib_printf("\nCurrent Score: %d", gamemechanics->getScore());
       
 
     if(gamemechanics->getExitFlagStatus() == true && gamemechanics->getLoseFlagStatus() == false)
     {
-        MacUILib_printf("Congratulations on Winning!");
+        MacUILib_printf("\nCongratulations on Winning!");
     }
 
     else if(gamemechanics->getExitFlagStatus() == true && gamemechanics->getLoseFlagStatus() == true)
     {
-        MacUILib_printf("Congratulations on Losing!");
+        MacUILib_printf("\nCongratulations on Losing!");
     }
 
     else if(gamemechanics->getExitFlagStatus() == false && gamemechanics->getLoseFlagStatus() == true)
     {
-        MacUILib_printf("How did you get here?!");
+        MacUILib_printf("\nHow did you get here?!");
     }
 }
 
@@ -161,5 +227,5 @@ void CleanUp(void)
 {  
 
     MacUILib_uninit();
-    delete[] gamemechanics;
+    delete gamemechanics;
 }
