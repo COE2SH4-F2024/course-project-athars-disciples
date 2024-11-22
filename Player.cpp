@@ -4,9 +4,14 @@
 Player::Player(GameMechs* thisGMRef)
 {
     mainGameMechsRef = thisGMRef;
-    playerPos.pos->x = (mainGameMechsRef->getBoardSizeX())/2;
-    playerPos.pos->y = (mainGameMechsRef->getBoardSizeY())/2;
+    
+    playerPosList = new objPosArrayList();
+    
+    playerPosList->getHeadElement().pos->x = (mainGameMechsRef->getBoardSizeX())/2;
+    playerPosList->getHeadElement().pos->y = (mainGameMechsRef->getBoardSizeY())/2;
     myDir = STOP;
+
+
     // more actions to be included
 }
 
@@ -16,29 +21,18 @@ Player::~Player()
     // delete any heap members here
 }
 
-objPos Player::getPlayerPos() const
+objPosArrayList* Player::getPlayerPos() const
 {
     // return the reference to the playerPos array list
-    return playerPos;
+    return playerPosList;
 }
 
-char Player::getSymbol()
+
+Player::Dir Player::getPlayerDir()
 {
-    return symbol;
+    return myDir;
 }
 
-
-void Player::setSymbol(char letter)
-{
-    symbol = letter;
-}
-
-
-void Player::setPlayerPos(int x, int y)
-{
-    playerPos.pos->x = x;
-    playerPos.pos->y = y;
-}
 
 void Player::updatePlayerDir()
 {
@@ -76,12 +70,10 @@ void Player::updatePlayerDir()
                 if (myDir == UP||myDir == DOWN||myDir == STOP)
                     myDir = RIGHT;
                     break;
+            
 
             default:
                 break;    
-                // Add more key processing here
-                // Add more key processing here
-                // Add more key processing here    
         }
 
     }
@@ -93,50 +85,67 @@ void Player::updatePlayerDir()
 void Player::movePlayer()
 {
     // PPA3 Finite State Machine logic
-    
-    int x = getPlayerPos().pos->x;
-    int y = getPlayerPos().pos->y;
     int upper_limit_x = mainGameMechsRef->getBoardSizeX();
     int upper_limit_y = mainGameMechsRef->getBoardSizeY();
     
+    objPos newHeadPosition;
+    newHeadPosition.pos->x = playerPosList->getHeadElement().pos->x;
+    newHeadPosition.pos->y = playerPosList->getHeadElement().pos->y;
 
     switch(myDir)
     {
         case UP:
-            setPlayerPos(x, --y);
-            if(getPlayerPos().pos->y<1)
+            --newHeadPosition.pos->y;
+            if(newHeadPosition.pos->y<1)
             {
-                setPlayerPos(x, upper_limit_y-2);
+                newHeadPosition.pos->y = upper_limit_y-2;
+
             }
+            playerPosList->insertHead(newHeadPosition);
+            playerPosList->removeTail();
             break;
         
         case DOWN:
-            setPlayerPos(x, ++y);
-            if(getPlayerPos().pos->y>upper_limit_y-2)
+            ++newHeadPosition.pos->y;
+            if(newHeadPosition.pos->y>upper_limit_y-2)
             {
-                setPlayerPos(x, 1);
+                newHeadPosition.pos->y = 1;
             }
+            playerPosList->insertHead(newHeadPosition);
+            playerPosList->removeTail();
             break;
 
         case RIGHT:
-            setPlayerPos(++x, y);
-            if(getPlayerPos().pos->x>upper_limit_x-2)
+            ++newHeadPosition.pos->x;
+            if(newHeadPosition.pos->x>upper_limit_x-2)
             {
-                setPlayerPos(1, y);
+
+                newHeadPosition.pos->x = 1;
+            
             }
+            playerPosList->insertHead(newHeadPosition);
+            playerPosList->removeTail();
             break;
 
         case LEFT:
-            setPlayerPos(--x, y);
-            if(getPlayerPos().pos->x<1)
+            --newHeadPosition.pos->x;
+            if(newHeadPosition.pos->x<1)
             {
-                setPlayerPos(upper_limit_x-2, y);
+                newHeadPosition.pos->x = upper_limit_x-2;
+
             }
+            
+            playerPosList->insertHead(newHeadPosition);
+            playerPosList->removeTail();
             break;
+        
+        case STOP:
         default:
             break;
             
     }
+    
+    
     
 
 }
