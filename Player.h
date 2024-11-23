@@ -30,7 +30,7 @@ class Player
         // More methods to be added here
 
     private:
-     // Upgrade this in iteration 3fff.       
+     // Upgrade this in iteration 3.       
         enum Dir myDir;
         objPosArrayList* playerPosList;
 

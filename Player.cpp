@@ -19,6 +19,7 @@ Player::Player(GameMechs* thisGMRef)
 Player::~Player()
 {
     // delete any heap members here
+    delete playerPosList;
 }
 
 objPosArrayList* Player::getPlayerPos() const
@@ -145,9 +146,6 @@ void Player::movePlayer()
             
     }
     
-    
-    
-
 }
 
 // More methods to be added
