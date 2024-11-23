@@ -23,7 +23,6 @@ void HideCursor() {
 
 
 #define DELAY_CONST 50000
-Food food;
 
 GameMechs *gamemechanics = new GameMechs();
 Player playercharacter(gamemechanics); 
@@ -61,6 +60,8 @@ void Initialize(void)
 {
     gamemechanics->setExit(false);
     HideCursor();
+
+    gamemechanics->getFood().generateFoodBucket(playercharacter.getPlayerPos()->getHeadElement(), gamemechanics->getBoardSizeX(), gamemechanics->getBoardSizeY());
     //ShowCursor(false);
     MacUILib_init();   
 
@@ -82,13 +83,31 @@ void GetInput(void)
 void RunLogic(void)
 {
     
+    bool eatFood = false;
+
+    for(int i = 0; i<playercharacter.getPlayerPos()->getSize(); i++)
+    {
+        for(int j = 0; j<gamemechanics->getFood().getAmountOfFood(); j++)
+        {
+            if((gamemechanics->getFoodPosition(j).pos->x == playercharacter.getPlayerPos()->getElement(i).pos->x) &&
+            (gamemechanics->getFoodPosition(j).pos->y == playercharacter.getPlayerPos()->getElement(i).pos->y))
+            {
+                gamemechanics->getFood().generateFood(playercharacter.getPlayerPos()->getElement(i), gamemechanics->getFoodPosition(j), gamemechanics->getBoardSizeX(), gamemechanics->getBoardSizeY());
+                eatFood = true;
+                i = 0;
+                j = 0;
+        }
+        }
+    }
+
+
     if(gamemechanics->getInput() == ' ')
     {
         gamemechanics->setExit(true);
         gamemechanics->setLoseFlag();
     }
 
-    if(gamemechanics->getInput() == '+')
+    if(eatFood == true)
     {
         gamemechanics->incrementScore();
         objPos newPosition;
@@ -183,10 +202,20 @@ void DrawScreen(void)
                 }
             }
             
+            for(int m = 0; m<gamemechanics->getFood().getAmountOfFood(); m++){
+                
+                if(gamemechanics->getFoodPosition(m).pos->x == x && gamemechanics->getFoodPosition(m).pos->y == y)
+                {
+                    MacUILib_printf("$");
+                    object_printed = true;
+                }
+            }
+
             if((y==0||x==0||x==(boardSizeX-1)||y==(boardSizeY-1)) && !object_printed)
             {
                 MacUILib_printf("#");
             }
+            
            
             else if(!object_printed)
             {

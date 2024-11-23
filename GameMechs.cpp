@@ -69,6 +69,17 @@ int GameMechs::getBoardSizeY() const
 }
 
 
+objPos GameMechs::getFoodPosition(int i)
+{
+    return foodObject.getFoodBucket()->getElement(i);
+}
+
+
+Food GameMechs::getFood() const
+{
+    return foodObject;
+}
+
 void GameMechs::setExit(bool value)
 {
     if(value)
