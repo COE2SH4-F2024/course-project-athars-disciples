@@ -3,6 +3,7 @@
 #include "objPos.h"
 #include "Player.h"
 #include <windows.h>
+#include "Food.h"
 
 using namespace std;
 
@@ -22,7 +23,7 @@ void HideCursor() {
 
 
 #define DELAY_CONST 50000
-
+Food food;
 
 GameMechs *gamemechanics = new GameMechs();
 Player playercharacter(gamemechanics); 
