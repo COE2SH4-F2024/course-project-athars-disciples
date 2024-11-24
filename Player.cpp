@@ -19,6 +19,7 @@ Player::Player(GameMechs* thisGMRef)
 Player::~Player()
 {
     // delete any heap members here
+    delete playerPosList;
 }
 
 objPosArrayList* Player::getPlayerPos() const
@@ -145,9 +146,42 @@ void Player::movePlayer()
             
     }
     
-    
-    
-
 }
 
 // More methods to be added
+
+bool Player::checkSelfCollision()
+{
+    for(int i = 0; i<getPlayerPos()->getSize(); i++)
+    {
+        for(int j = 0; j<getPlayerPos()->getSize(); j++)
+        {
+            if(i!=j)
+            {
+                if((getPlayerPos()->getElement(i).pos->x == getPlayerPos()->getElement(j).pos->x) 
+                && (getPlayerPos()->getElement(i).pos->y == getPlayerPos()->getElement(j).pos->y))
+                {
+                    return true;
+                }
+            }
+        }
+    }
+
+    return false;
+    
+}
+
+
+bool Player::checkFoodCollision(int foodElement)
+{
+    for(int i = 0; i<getPlayerPos()->getSize(); i++)
+    {
+        if(getPlayerPos()->getElement(i).pos->x == mainGameMechsRef->getFoodPosition(foodElement).pos->x
+        && getPlayerPos()->getElement(i).pos->y == mainGameMechsRef->getFoodPosition(foodElement).pos->y)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}

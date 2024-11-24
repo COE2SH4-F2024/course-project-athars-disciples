@@ -6,6 +6,7 @@
 
 #include "objPos.h"
 #include "objPosArrayList.h"
+#include "food.h"
 
 using namespace std;
 
@@ -19,8 +20,7 @@ class GameMechs
 
         int boardSizeX;
         int boardSizeY;
-
-        objPos food;
+        Food* foodObject = new Food();
 
     public:
         GameMechs();
@@ -35,6 +35,9 @@ class GameMechs
         char getInput() const;
         void setInput(char this_input);
         void clearInput();
+
+        objPos getFoodPosition(int i);
+        Food* getFood();
 
         int getBoardSizeX() const;
         int getBoardSizeY() const;

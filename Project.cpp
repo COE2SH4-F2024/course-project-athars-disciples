@@ -23,7 +23,6 @@ void HideCursor() {
 
 
 #define DELAY_CONST 50000
-Food food;
 
 GameMechs *gamemechanics = new GameMechs();
 Player playercharacter(gamemechanics); 
@@ -61,7 +60,12 @@ void Initialize(void)
 {
     gamemechanics->setExit(false);
     HideCursor();
+
+    gamemechanics->getFood();
+
+    gamemechanics->getFood()->generateFoodBucket(playercharacter.getPlayerPos()->getHeadElement(), gamemechanics->getBoardSizeX(), gamemechanics->getBoardSizeY());
     //ShowCursor(false);
+
     MacUILib_init();   
 
 }
@@ -82,13 +86,30 @@ void GetInput(void)
 void RunLogic(void)
 {
     
+    bool eatFood = false;
+    
+
+    for(int j = 0; j<gamemechanics->getFood()->getAmountOfFood(); j++)
+    {
+        if(playercharacter.checkFoodCollision(j) == true)
+        {
+            objPos tempFoodItem;
+            gamemechanics->getFood()->generateFood(playercharacter.getPlayerPos()->getHeadElement(), &tempFoodItem, gamemechanics->getBoardSizeX(), gamemechanics->getBoardSizeY());
+            gamemechanics->getFood()->getFoodBucket()->setElement(j, tempFoodItem);
+
+            eatFood = true;
+            break;
+        }
+    }
+    
+
     if(gamemechanics->getInput() == ' ')
     {
         gamemechanics->setExit(true);
         gamemechanics->setLoseFlag();
     }
 
-    if(gamemechanics->getInput() == '+')
+    if(eatFood == true)
     {
         gamemechanics->incrementScore();
         objPos newPosition;
@@ -133,22 +154,11 @@ void RunLogic(void)
     playercharacter.movePlayer();
     gamemechanics->clearInput(); 
 
-    for(int i = 0; i<playercharacter.getPlayerPos()->getSize(); i++)
+    if(playercharacter.checkSelfCollision() == true)
     {
-        for(int j = 0; j<playercharacter.getPlayerPos()->getSize(); j++)
-        {
-            if(i!=j)
-            {
-                if((playercharacter.getPlayerPos()->getElement(i).pos->x == playercharacter.getPlayerPos()->getElement(j).pos->x) 
-                && (playercharacter.getPlayerPos()->getElement(i).pos->y == playercharacter.getPlayerPos()->getElement(j).pos->y))
-                {
-                    gamemechanics->setExit(true);
-                    gamemechanics->setLoseFlag();
-                }
-            }
-        }
+        gamemechanics->setExit(true);
+        gamemechanics->setLoseFlag();
     }
-
 }
 
 void DrawScreen(void)
@@ -173,26 +183,38 @@ void DrawScreen(void)
         {
             object_printed = false; 
             
-            for(int j = 0; j<playercharacter.getPlayerPos()->getSize(); j++)
-            {
-                if((playercharacter.getPlayerPos()->getElement(j).pos->x == x) && (playercharacter.getPlayerPos()->getElement(j).pos->y == y))
-                {
-                    MacUILib_printf("%c",playercharacter.getPlayerPos()->getElement(j).getSymbol());
-                    object_printed = true; 
-
-                }
-            }
-            
             if((y==0||x==0||x==(boardSizeX-1)||y==(boardSizeY-1)) && !object_printed)
             {
                 MacUILib_printf("#");
-            }
-           
-            else if(!object_printed)
-            {
-                MacUILib_printf(" ");
+                continue;
             }
 
+                       
+            else
+            {
+                for(int j = 0; j<playercharacter.getPlayerPos()->getSize(); j++)
+                {
+                    if((playercharacter.getPlayerPos()->getElement(j).pos->x == x) && (playercharacter.getPlayerPos()->getElement(j).pos->y == y))
+                    {
+                        MacUILib_printf("%c",playercharacter.getPlayerPos()->getElement(j).getSymbol());
+                        object_printed = true; 
+
+                    }
+                }
+            
+                for(int m = 0; m<gamemechanics->getFood()->getAmountOfFood(); m++)
+                {
+                    
+                    if(gamemechanics->getFoodPosition(m).pos->x == x && gamemechanics->getFoodPosition(m).pos->y == y)
+                    {
+                        MacUILib_printf("$");
+                        object_printed = true;
+                    }
+                }
+
+                if(!object_printed)
+                    MacUILib_printf(" ");
+            }
         }
 
         MacUILib_printf("\n");
