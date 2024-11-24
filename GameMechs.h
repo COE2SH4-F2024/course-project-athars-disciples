@@ -20,7 +20,7 @@ class GameMechs
 
         int boardSizeX;
         int boardSizeY;
-        Food foodObject;
+        Food* foodObject = new Food();
 
     public:
         GameMechs();
@@ -37,7 +37,7 @@ class GameMechs
         void clearInput();
 
         objPos getFoodPosition(int i);
-        Food getFood() const;
+        Food* getFood();
 
         int getBoardSizeX() const;
         int getBoardSizeY() const;

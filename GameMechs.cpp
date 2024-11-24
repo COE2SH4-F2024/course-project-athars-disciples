@@ -28,7 +28,7 @@ GameMechs::GameMechs(int boardX, int boardY)
 // do you need a destructor?
 GameMechs::~GameMechs()
 {
-    
+    delete foodObject;
 }
 
 bool GameMechs::getExitFlagStatus() const
@@ -71,11 +71,11 @@ int GameMechs::getBoardSizeY() const
 
 objPos GameMechs::getFoodPosition(int i)
 {
-    return foodObject.getFoodBucket()->getElement(i);
+    return foodObject->getFoodBucket()->getElement(i);
 }
 
 
-Food GameMechs::getFood() const
+Food* GameMechs::getFood()
 {
     return foodObject;
 }

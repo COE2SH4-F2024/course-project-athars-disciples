@@ -2,24 +2,21 @@
 #include <iostream>
 
 // Paste your Tested implementation here.
-// Paste your Tested implementation here.
-// Paste your Tested implementation here.
 
 objPosArrayList::objPosArrayList()
 {
     arrayCapacity = 200;
-    listSize = 3;
     aList = new objPos[arrayCapacity];
 
+    listSize = 3;
+    
     for(int i = 0; i<listSize; i++)
     {
-        int index2 = 10+i;
-        aList[i].setObjPos(10, index2, '*');
+        aList[i].setObjPos(10, 10 + i, '*');
     }
+    
         
 }
-
-
 
 objPosArrayList::~objPosArrayList()
 {
@@ -29,6 +26,11 @@ objPosArrayList::~objPosArrayList()
 int objPosArrayList::getSize() const
 {
     return listSize;
+}
+
+void objPosArrayList::setListSize(int x)
+{
+    listSize = x;
 }
 
 void objPosArrayList::insertHead(objPos thisPos)
@@ -85,11 +87,17 @@ objPos objPosArrayList::getTailElement() const
 
 objPos objPosArrayList::getElement(int index) const
 {
-    if (index < 0 || index >= listSize) {
+    if (index < 0 || index>=listSize) {
         throw std::out_of_range("Out of range index\n");
     }
 
     return aList[index];
+}
+
+void objPosArrayList::setElement(int i, objPos temp)
+{   
+    aList[i].pos->x = temp.pos->x;
+    aList[i].pos->y = temp.pos->y;
 }
 
 

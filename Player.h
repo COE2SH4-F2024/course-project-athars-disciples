@@ -26,6 +26,8 @@ class Player
         void updatePlayerDir();
         Dir getPlayerDir();
         void movePlayer();
+        bool checkSelfCollision();
+        bool checkFoodCollision(int foodElement);
 
         // More methods to be added here
 
