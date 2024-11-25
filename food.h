@@ -19,8 +19,14 @@ class Food
         Food();
         ~Food();
 
+        Food &operator=(const Food &copy);
+
+        //Copy constructor
+        Food(const Food &copy);
+        
+
         void generateFood(objPos blockOff, objPos* inputItem, int xRange, int yRange); //random food generation algorithm - ppa3
-        void generateFoodBucket(objPos blockOff, int xRange, int yRange);
+        void generateFoodBucket(objPosArrayList blockOff, int xRange, int yRange);
        //Getter method for obtaining a copy of the current position of the food.
         objPosArrayList* getFoodBucket() const;
 

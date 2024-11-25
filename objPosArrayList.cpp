@@ -1,10 +1,14 @@
 #include "objPosArrayList.h"
 #include <iostream>
+#include <windows.h>
+
+
 
 // Paste your Tested implementation here.
 
 objPosArrayList::objPosArrayList()
 {
+    //SetConsoleOutputCP(CP_UTF8);
     arrayCapacity = 200;
     aList = new objPos[arrayCapacity];
 
@@ -16,6 +20,36 @@ objPosArrayList::objPosArrayList()
     }
     
         
+}
+
+objPosArrayList::objPosArrayList(const objPosArrayList &copy)
+{
+    arrayCapacity = copy.arrayCapacity;
+    aList = new objPos[arrayCapacity];
+
+    listSize = copy.listSize;
+
+    for(int i = 0; i<listSize; i++)
+    {
+        aList[i].getObjPos() = copy.getElement(i);
+    }
+
+}
+
+
+objPosArrayList &objPosArrayList::operator=(const objPosArrayList &copy)
+{
+    delete[] aList;
+
+    arrayCapacity = copy.arrayCapacity;
+    aList = new objPos[arrayCapacity];
+
+    listSize = copy.listSize;
+
+    for(int i = 0; i<listSize; i++)
+    {
+        aList[i].getObjPos() = copy.getElement(i);
+    }
 }
 
 objPosArrayList::~objPosArrayList()

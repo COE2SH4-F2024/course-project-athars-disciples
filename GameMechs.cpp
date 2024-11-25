@@ -10,6 +10,7 @@ GameMechs::GameMechs()
     score = 0;
     exitFlag = false;
     loseFlag = false;
+    foodObject = new Food(); 
     
 }
 
@@ -20,6 +21,7 @@ GameMechs::GameMechs(int boardX, int boardY)
     score = 0;
     exitFlag = false;
     loseFlag = false;
+    foodObject = new Food(); 
 
     //Defining board
 

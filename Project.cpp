@@ -24,6 +24,8 @@ void HideCursor() {
 
 #define DELAY_CONST 50000
 
+
+
 GameMechs *gamemechanics = new GameMechs();
 Player playercharacter(gamemechanics); 
 
@@ -40,6 +42,7 @@ void CleanUp(void);
 
 int main(void)
 {
+    SetConsoleOutputCP(CP_UTF8);
 
     Initialize();
 
@@ -63,8 +66,7 @@ void Initialize(void)
 
     gamemechanics->getFood();
 
-    gamemechanics->getFood()->generateFoodBucket(playercharacter.getPlayerPos()->getHeadElement(), gamemechanics->getBoardSizeX(), gamemechanics->getBoardSizeY());
-    //ShowCursor(false);
+    gamemechanics->getFood()->generateFoodBucket(*(playercharacter.getPlayerPos()), gamemechanics->getBoardSizeX(), gamemechanics->getBoardSizeY());
 
     MacUILib_init();   
 
@@ -83,6 +85,7 @@ void GetInput(void)
    }
 }
 
+
 void RunLogic(void)
 {
     
@@ -91,11 +94,10 @@ void RunLogic(void)
 
     for(int j = 0; j<gamemechanics->getFood()->getAmountOfFood(); j++)
     {
-        if(playercharacter.checkFoodCollision(j) == true)
+        if(playercharacter.checkFoodCollision() && playercharacter.getPlayerDir() != Player::STOP)
         {
-            objPos tempFoodItem;
-            gamemechanics->getFood()->generateFood(playercharacter.getPlayerPos()->getHeadElement(), &tempFoodItem, gamemechanics->getBoardSizeX(), gamemechanics->getBoardSizeY());
-            gamemechanics->getFood()->getFoodBucket()->setElement(j, tempFoodItem);
+            objPosArrayList temp = *(playercharacter.getPlayerPos());
+            gamemechanics->getFood()->generateFoodBucket(temp, gamemechanics->getBoardSizeX(), gamemechanics->getBoardSizeY());
 
             eatFood = true;
             break;
@@ -186,9 +188,7 @@ void DrawScreen(void)
             if((y==0||x==0||x==(boardSizeX-1)||y==(boardSizeY-1)) && !object_printed)
             {
                 MacUILib_printf("#");
-                continue;
             }
-
                        
             else
             {
@@ -196,7 +196,8 @@ void DrawScreen(void)
                 {
                     if((playercharacter.getPlayerPos()->getElement(j).pos->x == x) && (playercharacter.getPlayerPos()->getElement(j).pos->y == y))
                     {
-                        MacUILib_printf("%c",playercharacter.getPlayerPos()->getElement(j).getSymbol());
+                        //MacUILib_printf("%c",playercharacter.getPlayerPos()->getElement(j).getSymbol());
+                        MacUILib_printf("@");
                         object_printed = true; 
 
                     }
@@ -207,7 +208,7 @@ void DrawScreen(void)
                     
                     if(gamemechanics->getFoodPosition(m).pos->x == x && gamemechanics->getFoodPosition(m).pos->y == y)
                     {
-                        MacUILib_printf("$");
+                        MacUILib_printf("$"); //gamemechanics->getFoodPosition(m).getSymbol());
                         object_printed = true;
                     }
                 }
@@ -232,12 +233,19 @@ void DrawScreen(void)
     else if(gamemechanics->getExitFlagStatus() == true && gamemechanics->getLoseFlagStatus() == true)
     {
         MacUILib_printf("\nCongratulations on Losing!");
+
     }
 
     else if(gamemechanics->getExitFlagStatus() == false && gamemechanics->getLoseFlagStatus() == true)
     {
         MacUILib_printf("\nHow did you get here?!");
     }
+
+
+    MacUILib_printf("\nThe X and Y positions of food object 1:[%d, %d]\n", gamemechanics->getFoodPosition(0).pos->x, gamemechanics->getFoodPosition(0).pos->y);
+    MacUILib_printf("\nThe X and Y positions of food object 2:[%d, %d]\n", gamemechanics->getFoodPosition(1).pos->x, gamemechanics->getFoodPosition(1).pos->y);
+    MacUILib_printf("\nThe X and Y positions of food object 3:[%d, %d]\n", gamemechanics->getFoodPosition(2).pos->x, gamemechanics->getFoodPosition(2).pos->y);
+
 }
 
 void LoopDelay(void)
@@ -250,5 +258,5 @@ void CleanUp(void)
 {  
 
     MacUILib_uninit();
-    delete gamemechanics;
+    delete[] gamemechanics;
 }
