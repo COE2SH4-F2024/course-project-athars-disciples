@@ -13,7 +13,7 @@ class Food
     private:
         //Holds the most recently generated food position and its ASCII symbol
         objPosArrayList* foodBucket;
-        int numberOfFood = 3;
+        int numberOfFood;
 
     public:
         Food();

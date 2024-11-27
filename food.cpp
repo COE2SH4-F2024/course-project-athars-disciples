@@ -5,9 +5,12 @@
 
 Food::Food()
 {
-    numberOfFood = 3;
-    foodBucket = new objPosArrayList();
-    foodBucket->setListSize(numberOfFood);
+    numberOfFood = 5;
+    foodBucket = new objPosArrayList(numberOfFood);
+    for (int i = 0; i < numberOfFood; i++)
+    {
+        foodBucket->setElement(i, objPos(0, 0, ' ')); 
+    }
 
 }
 
@@ -36,9 +39,9 @@ Food::Food(const Food &copy)
     foodBucket = new objPosArrayList();
     numberOfFood = copy.getAmountOfFood();
 
-    foodBucket->setListSize(numberOfFood);
+    foodBucket->setListSize(copy.getAmountOfFood());
 
-    for(int i = 0; i<numberOfFood; i++)
+    for(int i = 0; i<foodBucket->getSize(); i++)
     {
         foodBucket->getElement(i).pos->x = copy.foodBucket->getElement(i).pos->x;
         foodBucket->getElement(i).pos->y = copy.foodBucket->getElement(i).pos->y;
@@ -47,7 +50,7 @@ Food::Food(const Food &copy)
 
 Food::~Food()
 {
-    delete foodBucket;
+    delete[] foodBucket;
 }
 
 objPosArrayList* Food::getFoodBucket() const
@@ -57,13 +60,14 @@ objPosArrayList* Food::getFoodBucket() const
 
 void Food::generateFood(objPos blockOff, objPos* inputItem, int xRange, int yRange)
 {
-    char food[] = {'$', '%', '!', '~'};
-    //from ppa3
+
+    char foodtypes[4] = {'A', 'B', 'C', 'D'}; 
+
     do
     {
         inputItem->pos->x = rand() % (xRange - 2) + 1; //check what to use
         inputItem->pos->y = rand() % (yRange - 2) + 1;
-        inputItem->symbol = food[(rand() % 3)];
+        inputItem->symbol = foodtypes[(rand() % 4)];
 
     } while((inputItem->pos->x == blockOff.pos->x) && (inputItem->pos->y == blockOff.pos->y));
 }
@@ -73,7 +77,7 @@ void Food::generateFoodBucket(objPosArrayList blockOff, int xRange, int yRange)
     objPos temp;
     bool valid = false;
 
-    for(int i = 0; i<foodBucket->getSize(); i++)
+    for(int i = 0; i<numberOfFood; i++)
     {
         valid = false;
 
@@ -81,10 +85,10 @@ void Food::generateFoodBucket(objPosArrayList blockOff, int xRange, int yRange)
         {
 
             valid = true;
+            generateFood(blockOff.getHeadElement(), &temp, xRange, yRange);
             
-            for(int j = 0; j<foodBucket->getSize(); j++)
+            for(int j = 0; j<numberOfFood; j++)
             {
-                generateFood(blockOff.getElement(i), &temp, xRange, yRange);
 
                 if(i!=j)
                 {
@@ -99,7 +103,6 @@ void Food::generateFoodBucket(objPosArrayList blockOff, int xRange, int yRange)
 
             for(int k = 0; k<blockOff.getSize(); k++)
             {
-                generateFood(blockOff.getElement(i), &temp, xRange, yRange);
                 if((temp.pos->x == blockOff.getElement(k).pos->x 
                 && temp.pos->y == blockOff.getElement(k).pos->y))
                 {
@@ -116,7 +119,6 @@ void Food::generateFoodBucket(objPosArrayList blockOff, int xRange, int yRange)
 
     }
 }
-
 
 
 int Food::getAmountOfFood() const

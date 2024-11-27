@@ -8,11 +8,20 @@
 
 objPosArrayList::objPosArrayList()
 {
+    arrayCapacity = 200;
+    aList = new objPos[arrayCapacity];
+    
+        
+}
+
+
+objPosArrayList::objPosArrayList(int size)
+{
     //SetConsoleOutputCP(CP_UTF8);
     arrayCapacity = 200;
     aList = new objPos[arrayCapacity];
 
-    listSize = 3;
+    listSize = size;
     
     for(int i = 0; i<listSize; i++)
     {
@@ -132,6 +141,7 @@ void objPosArrayList::setElement(int i, objPos temp)
 {   
     aList[i].pos->x = temp.pos->x;
     aList[i].pos->y = temp.pos->y;
+    aList[i].symbol = temp.symbol;
 }
 
 

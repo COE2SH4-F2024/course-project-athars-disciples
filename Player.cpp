@@ -5,7 +5,7 @@ Player::Player(GameMechs* thisGMRef)
 {
     mainGameMechsRef = thisGMRef;
     
-    playerPosList = new objPosArrayList();
+    playerPosList = new objPosArrayList(1);
     
     playerPosList->getHeadElement().pos->x = (mainGameMechsRef->getBoardSizeX())/2;
     playerPosList->getHeadElement().pos->y = (mainGameMechsRef->getBoardSizeY())/2;
@@ -156,6 +156,12 @@ void Player::movePlayer()
 
 bool Player::checkSelfCollision()
 {
+
+    if(playerPosList->getSize() == 1)
+    {
+        return false;
+    }
+    
     for(int i = 0; i<getPlayerPos()->getSize(); i++)
     {
         for(int j = 0; j<getPlayerPos()->getSize(); j++)
@@ -171,7 +177,7 @@ bool Player::checkSelfCollision()
         }
     }
 
-    return false;
+ 
     
 }
 

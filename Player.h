@@ -12,7 +12,6 @@ class Player
     // Only some sample members are included here
 
     // You will include more data members and member functions to complete your design.
-
     
     public:
         enum Dir {UP, DOWN, LEFT, RIGHT, STOP};  // This is the direction state
