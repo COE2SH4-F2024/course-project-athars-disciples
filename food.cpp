@@ -9,7 +9,7 @@ Food::Food()
     foodBucket = new objPosArrayList(numberOfFood);
     for (int i = 0; i < numberOfFood; i++)
     {
-        foodBucket->setElement(i, objPos(0, 0, ' ')); 
+        foodBucket->setElement(i, objPos(0, 0, 'A')); 
     }
 
 }
@@ -27,6 +27,7 @@ Food &Food::operator=(const Food &copy)
     {
         foodBucket->getElement(i).pos->x = copy.foodBucket->getElement(i).pos->x;
         foodBucket->getElement(i).pos->y = copy.foodBucket->getElement(i).pos->y;
+        foodBucket->getElement(i).setSymbol(copy.foodBucket->getElement(i).symbol); 
     }
 
     
@@ -45,6 +46,7 @@ Food::Food(const Food &copy)
     {
         foodBucket->getElement(i).pos->x = copy.foodBucket->getElement(i).pos->x;
         foodBucket->getElement(i).pos->y = copy.foodBucket->getElement(i).pos->y;
+        foodBucket->getElement(i).setSymbol(copy.foodBucket->getElement(i).symbol);  ;
     }
 }
 

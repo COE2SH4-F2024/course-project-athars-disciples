@@ -76,6 +76,10 @@ void Player::updatePlayerDir()
                     myDir = RIGHT;
                     break;
             
+            case ' ':
+                mainGameMechsRef->setExit(true);
+                mainGameMechsRef->setLoseFlag();
+            
 
             default:
                 break;    
@@ -190,9 +194,27 @@ bool Player::checkFoodCollision()
         for(int j = 0; j<mainGameMechsRef->getFood()->getAmountOfFood(); j++)
         {
 
-            if(getPlayerPos()->getElement(i).pos->x == mainGameMechsRef->getFood()->getFoodBucket()->getElement(j).pos->x
-            && getPlayerPos()->getElement(i).pos->y == mainGameMechsRef->getFood()->getFoodBucket()->getElement(j).pos->y)
+            if(getPlayerPos()->getElement(i).pos->x == mainGameMechsRef->getFoodPosition(j).pos->x
+            && getPlayerPos()->getElement(i).pos->y == mainGameMechsRef->getFoodPosition(j).pos->y)
             {
+                switch(mainGameMechsRef->getFoodPosition(j).symbol)
+                {
+                    case 'A':
+                        mainGameMechsRef->incrementScore(10);
+                        break;
+                    case 'B':
+                        mainGameMechsRef->incrementScore(20);
+                        break;
+                    case 'C':
+                        mainGameMechsRef->incrementScore(30);
+                        break;
+                    case 'D':
+                        mainGameMechsRef->incrementScore(-30);
+                        break;
+
+                    default:
+                        break;
+                }
                 return true;
             }
         }

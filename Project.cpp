@@ -119,62 +119,29 @@ void RunLogic(void)
 
     //Setting a boolean value checking whether the snake ate food to false initially
     bool eatFood = false;
-    bool foodIndex[gamemechanics->getFood()->getAmountOfFood()] = {false};
-    
+    int index = 0;
 
     //Checking every food object within the foodbuckets position against every player object position
     for(int j = 0; j<gamemechanics->getFood()->getAmountOfFood(); j++)
     {
-        if(playercharacter.checkFoodCollision() && playercharacter.getPlayerDir() != Player::STOP)
+        if((playercharacter.checkFoodCollision()) && (playercharacter.getPlayerDir() != Player::STOP))
         {
-            //Regenerating the foodbucket depending on the new player object positions
-            objPosArrayList temp = *(playercharacter.getPlayerPos());
-            gamemechanics->getFood()->generateFoodBucket(temp, gamemechanics->getBoardSizeX(), gamemechanics->getBoardSizeY());
             //Setting eatfood to true (to be used later in runlogic)
-            foodIndex[j] = true;
+            index = j;
             eatFood = true;
             break;
         }
     }
     
 
-    //Checking if the user has inputted the exit character (spacebar)
-    if(gamemechanics->getInput() == ' ')
-    {
-        //Setting exitFlag and loseFlag in gamemechanics should they exit without winning
-        gamemechanics->setExit(true);
-        gamemechanics->setLoseFlag();
-    }
-
     //Section where necessary changes are made depending on eatFood condition
     if(eatFood == true)
     {
         //Incrementing the score to account for player capturing food
-        for(int h = 0; h<gamemechanics->getFood()->getAmountOfFood(); h++)
-        {
-            if(foodIndex[h] == true)
-            {
-                if((gamemechanics->getFood()->getFoodBucket()->getElement(h).symbol) == 'A')
-                {
-                    gamemechanics->incrementScore(10);
-                }
-
-                else if((gamemechanics->getFood()->getFoodBucket()->getElement(h).symbol) == 'B')
-                {
-                    gamemechanics->incrementScore(20);
-                }
-
-                else if((gamemechanics->getFood()->getFoodBucket()->getElement(h).symbol) == 'C')
-                {
-                    gamemechanics->incrementScore(30);
-                }
-
-                else if((gamemechanics->getFood()->getFoodBucket()->getElement(h).symbol) == 'D')
-                {
-                    gamemechanics->incrementScore(-30);
-                }
-            }
-        }
+        
+        //Regenerating the foodbucket depending on the new player object positions
+        objPosArrayList temp = *(playercharacter.getPlayerPos());
+        gamemechanics->getFood()->generateFoodBucket(temp, gamemechanics->getBoardSizeX(), gamemechanics->getBoardSizeY());
 
 
 
@@ -188,7 +155,7 @@ void RunLogic(void)
             //Changing the new positions x and y variables to match the existing direction and increase in direction of food eaten
             newPosition.pos->x = playercharacter.getPlayerPos()->getHeadElement().pos->x + 1;
             newPosition.pos->y = playercharacter.getPlayerPos()->getHeadElement().pos->y;
-            newPosition.symbol = '@';
+            newPosition.symbol = '>';
         }
 
         //Checking if the current direction of the player character is left
@@ -197,7 +164,7 @@ void RunLogic(void)
             //Changing the new positions x and y variables to match the existing direction and increase in direction of food eaten
             newPosition.pos->x = playercharacter.getPlayerPos()->getHeadElement().pos->x - 1;
             newPosition.pos->y = playercharacter.getPlayerPos()->getHeadElement().pos->y;
-            newPosition.symbol = '@';
+            newPosition.symbol = '<';
         }
 
         //Checking if the current direction of the player character is up or stop (player is assumed to be pointing up at beginning)
@@ -206,7 +173,7 @@ void RunLogic(void)
             //Changing the new positions x and y variables to match the existing direction and increase in direction of food eaten
             newPosition.pos->x = playercharacter.getPlayerPos()->getHeadElement().pos->x;
             newPosition.pos->y = playercharacter.getPlayerPos()->getHeadElement().pos->y-1;
-            newPosition.symbol = '@';
+            newPosition.symbol = '^';
         }
 
         //Checking if the current direction of the player character is down
@@ -220,10 +187,10 @@ void RunLogic(void)
 
         //Insearting a new head using the new parameters stored in the newPosition objPos 
         playercharacter.getPlayerPos()->insertHead(newPosition);
-    }
 
+    }
     //Checking if the input is not null or spacebar (no need to update direction if nothing new is inputted or when exiting)
-    if(gamemechanics->getInput() != 0 && gamemechanics->getInput() != ' ')
+    if(gamemechanics->getInput() != 0)
     {
         playercharacter.updatePlayerDir();
     }
@@ -254,7 +221,11 @@ void DrawScreen(void)
     int boardSizeY = gamemechanics->getBoardSizeY();
     int boardSizeX = gamemechanics->getBoardSizeX();
     bool object_printed = false;
+    bool temp = false;
+    int var = 0;
     
+    MacUILib_printf("               𝓨𝓸𝓾𝓼𝓼𝓮𝓯'𝓼 𝓢𝓷𝓪𝓴𝓮 𝓖𝓪𝓶𝓮\n");
+    MacUILib_printf("        _________________________________\n\n");
 
     MacUILib_printf("\nUse the WASD Keys to navigate and spacebar to exit\n");
     
@@ -269,10 +240,10 @@ void DrawScreen(void)
         for(int x = 0; x<boardSizeX; x++)
         {
             object_printed = false; 
-            
+
             if((y==0||x==0||x==(boardSizeX-1)||y==(boardSizeY-1)) && !object_printed)
             {
-                MacUILib_printf("██");
+                MacUILib_printf("#");
             }
                        
             else
@@ -281,51 +252,53 @@ void DrawScreen(void)
                 {
                     if((playercharacter.getPlayerPos()->getElement(j).pos->x == x) && (playercharacter.getPlayerPos()->getElement(j).pos->y == y))
                     {
-                        MacUILib_printf("%2c", '@');
+                        MacUILib_printf("%c", '@');
                         object_printed = true; 
 
                     }
                 }
-                if(!playercharacter.checkFoodCollision() && !playercharacter.checkSelfCollision()){
-                for(int m = 0; m<gamemechanics->getFood()->getAmountOfFood(); m++)
+                
+                if(!playercharacter.checkFoodCollision() && !playercharacter.checkSelfCollision())
                 {
-                    
-                    if(gamemechanics->getFoodPosition(m).pos->x == x && gamemechanics->getFoodPosition(m).pos->y == y)
+                    for(int m = 0; m<gamemechanics->getFood()->getAmountOfFood(); m++)
                     {
-
-                        if(gamemechanics->getFoodPosition(m).symbol == 'A')
+                        
+                        if(gamemechanics->getFoodPosition(m).pos->x == x && gamemechanics->getFoodPosition(m).pos->y == y)
                         {
-                            MacUILib_printf("🍎"); 
-                            object_printed = true;
-                            break;
-                        }
 
-                        else if(gamemechanics->getFoodPosition(m).symbol == 'B')
-                        {
-                            MacUILib_printf("🍐"); 
-                            object_printed = true;
-                            break;
-                        }
+                            if(gamemechanics->getFoodPosition(m).symbol == 'A')
+                            {
+                                MacUILib_printf("%c", gamemechanics->getFoodPosition(m).symbol); 
+                                object_printed = true;
+                                break;
+                            }
 
-                        else if(gamemechanics->getFoodPosition(m).symbol == 'C')
-                        {
-                            MacUILib_printf("🍒"); 
-                            object_printed = true;
-                            break;
-                        }
+                            else if(gamemechanics->getFoodPosition(m).symbol == 'B')
+                            {
+                                MacUILib_printf("%c", gamemechanics->getFoodPosition(m).symbol); 
+                                object_printed = true;
+                                break;
+                            }
 
-                        else if(gamemechanics->getFoodPosition(m).symbol == 'D')
-                        {
-                            MacUILib_printf("🔥"); 
-                            object_printed = true;
-                            break;
+                            else if(gamemechanics->getFoodPosition(m).symbol == 'C')
+                            {
+                                MacUILib_printf("%c", gamemechanics->getFoodPosition(m).symbol); 
+                                object_printed = true;
+                                break;
+                            }
+
+                            else if(gamemechanics->getFoodPosition(m).symbol == 'D')
+                            {
+                                MacUILib_printf("%c", gamemechanics->getFoodPosition(m).symbol); 
+                                object_printed = true;
+                                break;
+                            }
                         }
                     }
                 }
-                }
 
                 if(!object_printed)
-                    MacUILib_printf("%2c", ' ');
+                    MacUILib_printf("%c", ' ');
             }
         }
 
@@ -336,7 +309,11 @@ void DrawScreen(void)
 
     MacUILib_printf("\nCurrent Score: %d", gamemechanics->getScore());
     MacUILib_printf("\nFood Guide:\n🍎 = 10 points\n🍐 = 20 points\n🍒 = 30 points\n🔥 = -30 points\n");
-      
+    MacUILib_printf("\nFood Details 1: %c, Position: [%d, %d]", gamemechanics->getFoodPosition(0).symbol, gamemechanics->getFoodPosition(0).pos->x, gamemechanics->getFoodPosition(0).pos->y);  
+    MacUILib_printf("\nFood Details 1: %c, Position: [%d, %d]", gamemechanics->getFoodPosition(1).symbol, gamemechanics->getFoodPosition(1).pos->x, gamemechanics->getFoodPosition(1).pos->y); 
+    MacUILib_printf("\nFood Details 1: %c, Position: [%d, %d]", gamemechanics->getFoodPosition(2).symbol, gamemechanics->getFoodPosition(2).pos->x, gamemechanics->getFoodPosition(2).pos->y);
+    MacUILib_printf("\nFood Details 1: %c, Position: [%d, %d]", gamemechanics->getFoodPosition(3).symbol, gamemechanics->getFoodPosition(3).pos->x, gamemechanics->getFoodPosition(3).pos->y);
+    MacUILib_printf("\nFood Details 1: %c, Position: [%d, %d]", gamemechanics->getFoodPosition(4).symbol, gamemechanics->getFoodPosition(4).pos->x, gamemechanics->getFoodPosition(4).pos->y); 
 
     if(gamemechanics->getExitFlagStatus() == true && gamemechanics->getLoseFlagStatus() == false)
     {
@@ -347,11 +324,6 @@ void DrawScreen(void)
     {
         MacUILib_printf("\nCongratulations on Losing!");
 
-    }
-
-    else if(gamemechanics->getExitFlagStatus() == false && gamemechanics->getLoseFlagStatus() == true)
-    {
-        MacUILib_printf("\nHow did you get here?!");
     }
 
 
