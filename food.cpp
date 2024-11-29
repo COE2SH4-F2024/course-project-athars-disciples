@@ -3,6 +3,7 @@
 #include "objPos.h"
 #include "food.h"
 
+
 Food::Food()
 {
     numberOfFood = 5;
@@ -62,6 +63,7 @@ objPosArrayList* Food::getFoodBucket() const
 
 void Food::generateFood(objPos blockOff, objPos* inputItem, int xRange, int yRange)
 {
+
 
     char foodtypes[4] = {'A', 'B', 'C', 'D'}; 
 

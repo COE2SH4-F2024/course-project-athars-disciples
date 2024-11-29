@@ -5,6 +5,7 @@
 #include <windows.h>
 
 using namespace std;
+int foodupdates = 0;
 
 //Note: This is not part of the project and only serves to make the game more playable. Please disregard
 void HideCursor() {
@@ -118,36 +119,42 @@ void RunLogic(void)
 {
 
     //Setting a boolean value checking whether the snake ate food to false initially
-    bool eatFood = false;
     int index = 0;
 
     //Checking every food object within the foodbuckets position against every player object position
-    for(int j = 0; j<gamemechanics->getFood()->getAmountOfFood(); j++)
-    {
-        if((playercharacter.checkFoodCollision()) && (playercharacter.getPlayerDir() != Player::STOP))
-        {
-            //Setting eatfood to true (to be used later in runlogic)
-            index = j;
-            eatFood = true;
-            break;
-        }
-    }
     
 
     //Section where necessary changes are made depending on eatFood condition
-    if(eatFood == true)
+    if((playercharacter.checkFoodCollision()) && (playercharacter.getPlayerDir() != Player::STOP))
     {
+        index = playercharacter.getFoodIndex();
         //Incrementing the score to account for player capturing food
-        
+        switch(gamemechanics->getFood()->getFoodBucket()->getElement(index).symbol)
+        {
+            case 'A':
+                gamemechanics->incrementScore(10);
+                foodupdates++;
+                break;
+            case 'B':
+                gamemechanics->incrementScore(20);
+                break;
+            case 'C':
+                gamemechanics->incrementScore(30);
+                break;
+            case 'D':
+                gamemechanics->incrementScore(-30);
+                break;
+
+            default:
+                break;
+        }
+
         //Regenerating the foodbucket depending on the new player object positions
         objPosArrayList temp = *(playercharacter.getPlayerPos());
         gamemechanics->getFood()->generateFoodBucket(temp, gamemechanics->getBoardSizeX(), gamemechanics->getBoardSizeY());
 
-
-
         //Defining a temporary new object position  
         objPos newPosition;
-
 
         //Checking if the current direction of the player character is right
         if(playercharacter.getPlayerDir() == Player::RIGHT)
@@ -263,7 +270,7 @@ void DrawScreen(void)
                     for(int m = 0; m<gamemechanics->getFood()->getAmountOfFood(); m++)
                     {
                         
-                        if(gamemechanics->getFoodPosition(m).pos->x == x && gamemechanics->getFoodPosition(m).pos->y == y)
+                        if(gamemechanics->getFood()->getFoodBucket()->getElement(m).pos->x == x && gamemechanics->getFoodPosition(m).pos->y == y)
                         {
 
                             if(gamemechanics->getFoodPosition(m).symbol == 'A')
@@ -307,7 +314,7 @@ void DrawScreen(void)
 
     }
 
-    MacUILib_printf("\nCurrent Score: %d", gamemechanics->getScore());
+    MacUILib_printf("\nCurrent Score: %d,  Food Updates: %d", gamemechanics->getScore(), foodupdates);
     MacUILib_printf("\nFood Guide:\n🍎 = 10 points\n🍐 = 20 points\n🍒 = 30 points\n🔥 = -30 points\n");
     MacUILib_printf("\nFood Details 1: %c, Position: [%d, %d]", gamemechanics->getFoodPosition(0).symbol, gamemechanics->getFoodPosition(0).pos->x, gamemechanics->getFoodPosition(0).pos->y);  
     MacUILib_printf("\nFood Details 1: %c, Position: [%d, %d]", gamemechanics->getFoodPosition(1).symbol, gamemechanics->getFoodPosition(1).pos->x, gamemechanics->getFoodPosition(1).pos->y); 

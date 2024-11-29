@@ -27,12 +27,14 @@ class Player
         void movePlayer();
         bool checkSelfCollision();
         bool checkFoodCollision();
+        int getFoodIndex();
 
         // More methods to be added here
 
     private:
      // Upgrade this in iteration 3.       
         enum Dir myDir;
+        int foodIndex;
         objPosArrayList* playerPosList;
 
         // Need a reference to the Main Game Mechanisms
