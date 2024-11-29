@@ -5,7 +5,6 @@
 #include <windows.h>
 
 using namespace std;
-int foodupdates = 0;
 
 //Note: This is not part of the project and only serves to make the game more playable. Please disregard
 void HideCursor() {
@@ -133,7 +132,6 @@ void RunLogic(void)
         {
             case 'A':
                 gamemechanics->incrementScore(10);
-                foodupdates++;
                 break;
             case 'B':
                 gamemechanics->incrementScore(20);
@@ -250,7 +248,7 @@ void DrawScreen(void)
 
             if((y==0||x==0||x==(boardSizeX-1)||y==(boardSizeY-1)) && !object_printed)
             {
-                MacUILib_printf("#");
+                MacUILib_printf("██");
             }
                        
             else
@@ -259,7 +257,7 @@ void DrawScreen(void)
                 {
                     if((playercharacter.getPlayerPos()->getElement(j).pos->x == x) && (playercharacter.getPlayerPos()->getElement(j).pos->y == y))
                     {
-                        MacUILib_printf("%c", '@');
+                        MacUILib_printf("%2c", '@');
                         object_printed = true; 
 
                     }
@@ -275,28 +273,28 @@ void DrawScreen(void)
 
                             if(gamemechanics->getFoodPosition(m).symbol == 'A')
                             {
-                                MacUILib_printf("%c", gamemechanics->getFoodPosition(m).symbol); 
+                                MacUILib_printf("🍎"); 
                                 object_printed = true;
                                 break;
                             }
 
                             else if(gamemechanics->getFoodPosition(m).symbol == 'B')
                             {
-                                MacUILib_printf("%c", gamemechanics->getFoodPosition(m).symbol); 
+                                MacUILib_printf("🍐"); 
                                 object_printed = true;
                                 break;
                             }
 
                             else if(gamemechanics->getFoodPosition(m).symbol == 'C')
                             {
-                                MacUILib_printf("%c", gamemechanics->getFoodPosition(m).symbol); 
+                                MacUILib_printf("🍒"); 
                                 object_printed = true;
                                 break;
                             }
 
                             else if(gamemechanics->getFoodPosition(m).symbol == 'D')
                             {
-                                MacUILib_printf("%c", gamemechanics->getFoodPosition(m).symbol); 
+                                MacUILib_printf("🔥"); 
                                 object_printed = true;
                                 break;
                             }
@@ -305,7 +303,7 @@ void DrawScreen(void)
                 }
 
                 if(!object_printed)
-                    MacUILib_printf("%c", ' ');
+                    MacUILib_printf("%2c", ' ');
             }
         }
 
@@ -314,13 +312,8 @@ void DrawScreen(void)
 
     }
 
-    MacUILib_printf("\nCurrent Score: %d,  Food Updates: %d", gamemechanics->getScore(), foodupdates);
+    MacUILib_printf("\nCurrent Score: %d", gamemechanics->getScore());
     MacUILib_printf("\nFood Guide:\n🍎 = 10 points\n🍐 = 20 points\n🍒 = 30 points\n🔥 = -30 points\n");
-    MacUILib_printf("\nFood Details 1: %c, Position: [%d, %d]", gamemechanics->getFoodPosition(0).symbol, gamemechanics->getFoodPosition(0).pos->x, gamemechanics->getFoodPosition(0).pos->y);  
-    MacUILib_printf("\nFood Details 1: %c, Position: [%d, %d]", gamemechanics->getFoodPosition(1).symbol, gamemechanics->getFoodPosition(1).pos->x, gamemechanics->getFoodPosition(1).pos->y); 
-    MacUILib_printf("\nFood Details 1: %c, Position: [%d, %d]", gamemechanics->getFoodPosition(2).symbol, gamemechanics->getFoodPosition(2).pos->x, gamemechanics->getFoodPosition(2).pos->y);
-    MacUILib_printf("\nFood Details 1: %c, Position: [%d, %d]", gamemechanics->getFoodPosition(3).symbol, gamemechanics->getFoodPosition(3).pos->x, gamemechanics->getFoodPosition(3).pos->y);
-    MacUILib_printf("\nFood Details 1: %c, Position: [%d, %d]", gamemechanics->getFoodPosition(4).symbol, gamemechanics->getFoodPosition(4).pos->x, gamemechanics->getFoodPosition(4).pos->y); 
 
     if(gamemechanics->getExitFlagStatus() == true && gamemechanics->getLoseFlagStatus() == false)
     {
