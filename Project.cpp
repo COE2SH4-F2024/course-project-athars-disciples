@@ -104,6 +104,7 @@ void GetInput(void)
    {
         //Setting the input within gamemechanics to the input
         gamemechanics->setInput(MacUILib_getChar());
+        
    }
 
    else

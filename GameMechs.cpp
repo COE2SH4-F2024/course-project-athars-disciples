@@ -42,6 +42,11 @@ bool GameMechs::getLoseFlagStatus() const
 {
     return loseFlag;
 }
+
+bool GameMechs::getWinFlagStatus() const
+{
+    return true;
+}
     
 
 char GameMechs::getInput() const
@@ -53,6 +58,7 @@ int GameMechs::getScore() const
 {
     return score;
 }
+
 
 
 void GameMechs::incrementScore(int scoreAdd)
