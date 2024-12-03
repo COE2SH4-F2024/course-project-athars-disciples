@@ -35,6 +35,7 @@ objPosArrayList* Player::getPlayerPos() const
 
 
 Player::Dir Player::getPlayerDir()
+
 {
     return myDir;
 }
