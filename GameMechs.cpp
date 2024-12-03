@@ -10,7 +10,9 @@ GameMechs::GameMechs()
     score = 0;
     exitFlag = false;
     loseFlag = false;
+    winFlag = false;
     foodObject = new Food(); 
+    diff = Start;
     
 }
 
@@ -21,7 +23,9 @@ GameMechs::GameMechs(int boardX, int boardY)
     score = 0;
     exitFlag = false;
     loseFlag = false;
+    winFlag = false;
     foodObject = new Food(); 
+    diff = Start;
 
     //Defining board
 
@@ -44,11 +48,10 @@ bool GameMechs::getLoseFlagStatus() const
 }
 
 bool GameMechs::getWinFlagStatus() const
-{
-    return true;
+{   
+    return winFlag;
 }
     
-
 char GameMechs::getInput() const
 {
     return input;
@@ -58,8 +61,6 @@ int GameMechs::getScore() const
 {
     return score;
 }
-
-
 
 void GameMechs::incrementScore(int scoreAdd)
 {
@@ -111,6 +112,34 @@ void GameMechs::setInput(char this_input)
 void GameMechs::clearInput()
 {
     input = '\0';
+}
+
+void GameMechs::setDifficulty()
+{
+    if(diff == Start)
+    {
+        if(input == 49)
+        {
+            diff = Easy;
+        }
+        else if(input == 50)
+        {
+            diff = Medium;
+        }
+        else if(input == 51)
+        {
+            diff = Hard;
+        }
+        else if(input == 52)
+        {
+            diff = Impossible;
+        }
+    }
+}
+
+GameMechs::Difficulty GameMechs::getDifficulty()
+{
+    return diff;
 }
 
 // More methods should be added here

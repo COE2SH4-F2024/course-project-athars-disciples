@@ -4,10 +4,16 @@
 #include "food.h"
 
 
+//Default constructor for food class
 Food::Food()
 {
+    //Initializing number of food to 5
     numberOfFood = 5;
+
+    //Storing foodbucket as a pointer to an objPosArrayList defined by size number of food
     foodBucket = new objPosArrayList(numberOfFood);
+
+    //Initializing the used variables to something random (simply to avoid access issues)
     for (int i = 0; i < numberOfFood; i++)
     {
         foodBucket->setElement(i, objPos(0, 0, 'A')); 
@@ -15,15 +21,24 @@ Food::Food()
 
 }
 
+//Copy assignment operator for food class
 Food &Food::operator=(const Food &copy)
 {
+
+    //Deletes initial data stored in food class
     delete[] foodBucket;
 
+    //Creates new foodbucket pointer
     foodBucket = new objPosArrayList();
+
+    //Assigns numberofFood to reference amount of food
     numberOfFood = copy.getAmountOfFood();
 
+    //Sets the size of the current foodBucket to the reference foodbucket
     foodBucket->setListSize(numberOfFood);
 
+
+    //Copying over all the elements within the reference foodbucket to the current foodbucket
     for(int i = 0; i<numberOfFood; i++)
     {
         foodBucket->getElement(i).pos->x = copy.foodBucket->getElement(i).pos->x;
@@ -35,6 +50,8 @@ Food &Food::operator=(const Food &copy)
 
 }
 
+
+//Copy operator for food class
 Food::Food(const Food &copy)
 {
 
@@ -51,13 +68,18 @@ Food::Food(const Food &copy)
     }
 }
 
+//Destructor for food class
 Food::~Food()
 {
+    //Destroying the memory allocated for foodbucket
     delete[] foodBucket;
 }
 
+
+//Getter for the Food class foodbucket
 objPosArrayList* Food::getFoodBucket() const
 {
+    //Returns pointer to the foodbucket
     return foodBucket;
 }
 

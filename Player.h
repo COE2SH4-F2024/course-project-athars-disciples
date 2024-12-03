@@ -25,17 +25,23 @@ class Player
         void updatePlayerDir();
         Dir getPlayerDir();
         void movePlayer();
+
         bool checkSelfCollision();
         bool checkFoodCollision();
-        int getFoodIndex();
+        //void setNewDirectionHead();
+
+        bool checkWinCondition();
+        void insertPlayerTail();
+        //void processFoodCollide();
+
 
         // More methods to be added here
 
     private:
-     // Upgrade this in iteration 3.       
+         
         enum Dir myDir;
-        int foodIndex;
         objPosArrayList* playerPosList;
+        int foodCollideIndex;
 
         // Need a reference to the Main Game Mechanisms
         GameMechs* mainGameMechsRef;
