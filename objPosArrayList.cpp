@@ -1,6 +1,5 @@
 #include "objPosArrayList.h"
 #include <iostream>
-#include <windows.h>
 
 
 
@@ -10,7 +9,8 @@ objPosArrayList::objPosArrayList()
 {
     arrayCapacity = 200;
     aList = new objPos[arrayCapacity];
-    
+    listSize = 1;
+    aList[0].setObjPos(10, 10, '^');
         
 }
 
@@ -23,7 +23,9 @@ objPosArrayList::objPosArrayList(int size)
 
     listSize = size;
     
-    for(int i = 0; i<listSize; i++)
+    aList[0].setObjPos(10, 10, '^');
+
+    for(int i = 1; i<listSize; i++)
     {
         aList[i].setObjPos(10, 10 + i, '*');
     }
@@ -40,7 +42,9 @@ objPosArrayList::objPosArrayList(const objPosArrayList &copy)
 
     for(int i = 0; i<listSize; i++)
     {
-        aList[i].getObjPos() = copy.getElement(i);
+        aList[i].getObjPos().setSymbol(copy.getElement(i).symbol);
+        aList[i].getObjPos().pos->x = copy.getElement(i).pos->x;
+        aList[i].getObjPos().pos->y = copy.getElement(i).pos->y;
     }
 
 }
@@ -57,7 +61,7 @@ objPosArrayList &objPosArrayList::operator=(const objPosArrayList &copy)
 
     for(int i = 0; i<listSize; i++)
     {
-        aList[i].getObjPos() = copy.getElement(i);
+        aList[i] = copy.getElement(i);
     }
 }
 
@@ -88,7 +92,7 @@ void objPosArrayList::insertHead(objPos thisPos)
     
     listSize++;
     
-    aList[0].setObjPos(thisPos.pos->x, thisPos.pos->y, '*');
+    aList[0].setObjPos(thisPos.pos->x, thisPos.pos->y, thisPos.getSymbol());
 }
 
 void objPosArrayList::insertTail(objPos thisPos)
@@ -98,8 +102,7 @@ void objPosArrayList::insertTail(objPos thisPos)
         adjustArraySize();
     }
     
-    listSize++;
-    aList[listSize-1].setObjPos(thisPos.pos->x, thisPos.pos->y, '*');
+    aList[listSize++].setObjPos(thisPos.pos->x, thisPos.pos->y, thisPos.getSymbol());
 }
 
 void objPosArrayList::removeHead()
@@ -159,5 +162,4 @@ void objPosArrayList::adjustArraySize()
     delete[] aList;
     
     aList = newList;
-
 }
