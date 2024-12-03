@@ -83,21 +83,23 @@ objPosArrayList* Food::getFoodBucket() const
     return foodBucket;
 }
 
+//Generate single food item at random within a range
 void Food::generateFood(objPos blockOff, objPos* inputItem, int xRange, int yRange)
 {
 
-
+    //food types
     char foodtypes[4] = {'A', 'B', 'C', 'D'}; 
-
+    //using ppa logic for food generation 
     do
     {
-        inputItem->pos->x = rand() % (xRange - 2) + 1; //check what to use
+        inputItem->pos->x = rand() % (xRange - 2) + 1; 
         inputItem->pos->y = rand() % (yRange - 2) + 1;
         inputItem->symbol = foodtypes[(rand() % 4)];
 
     } while((inputItem->pos->x == blockOff.pos->x) && (inputItem->pos->y == blockOff.pos->y));
 }
 
+//Generates foodBucket at random positions
 void Food::generateFoodBucket(objPosArrayList blockOff, int xRange, int yRange)
 {
     objPos temp;
@@ -105,7 +107,7 @@ void Food::generateFoodBucket(objPosArrayList blockOff, int xRange, int yRange)
 
     for(int i = 0; i<numberOfFood; i++)
     {
-        valid = false;
+        valid = false; //reset flag for each food item
 
         while(!valid)
         {
@@ -126,7 +128,7 @@ void Food::generateFoodBucket(objPosArrayList blockOff, int xRange, int yRange)
                     }
                 }
             }
-
+            //Check for overlapping
             for(int k = 0; k<blockOff.getSize(); k++)
             {
                 if((temp.pos->x == blockOff.getElement(k).pos->x 
@@ -146,12 +148,13 @@ void Food::generateFoodBucket(objPosArrayList blockOff, int xRange, int yRange)
     }
 }
 
-
+//Getter for numberOfFood
 int Food::getAmountOfFood() const
 {
     return numberOfFood;
 }
 
+//Decreases numberOfFood by 1
 void Food::decreaseFood()
 {
     numberOfFood--;

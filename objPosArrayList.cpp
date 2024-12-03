@@ -2,19 +2,21 @@
 #include <iostream>
 
 
-
-// Paste your Tested implementation here.
-
+//Default constructor for objPosArrayList class
 objPosArrayList::objPosArrayList()
 {
+    //Initializing capacity
     arrayCapacity = 200;
+    //allocating memory
     aList = new objPos[arrayCapacity];
+    //Initializing the list size
     listSize = 1;
+    //Setting the position and symbol
     aList[0].setObjPos(10, 10, '^');
         
 }
 
-
+//Constructor for objPosArrayList class
 objPosArrayList::objPosArrayList(int size)
 {
     //SetConsoleOutputCP(CP_UTF8);
@@ -24,7 +26,7 @@ objPosArrayList::objPosArrayList(int size)
     listSize = size;
     
     aList[0].setObjPos(10, 10, '^');
-
+    //Initializing elements with positions and symbols
     for(int i = 1; i<listSize; i++)
     {
         aList[i].setObjPos(10, 10 + i, '*');
@@ -33,6 +35,7 @@ objPosArrayList::objPosArrayList(int size)
         
 }
 
+//Copy constructor for objPosArrayList class
 objPosArrayList::objPosArrayList(const objPosArrayList &copy)
 {
     arrayCapacity = copy.arrayCapacity;
@@ -49,7 +52,7 @@ objPosArrayList::objPosArrayList(const objPosArrayList &copy)
 
 }
 
-
+//Copy assignment constructor for objPosArrayList class
 objPosArrayList &objPosArrayList::operator=(const objPosArrayList &copy)
 {
     delete[] aList;
@@ -65,21 +68,25 @@ objPosArrayList &objPosArrayList::operator=(const objPosArrayList &copy)
     }
 }
 
+//Destructor for objPosArrayList class
 objPosArrayList::~objPosArrayList()
 {
     delete[] aList;
 }
 
+//Getter for the listSize
 int objPosArrayList::getSize() const
 {
     return listSize;
 }
 
+//Sets listSize
 void objPosArrayList::setListSize(int x)
 {
     listSize = x;
 }
 
+//Inserting element at the head of the list
 void objPosArrayList::insertHead(objPos thisPos)
 {
     if(listSize == arrayCapacity)
@@ -96,10 +103,11 @@ void objPosArrayList::insertHead(objPos thisPos)
     }
     
     listSize++;
-    
+    //Setting new head element
     aList[0].setObjPos(thisPos.pos->x, thisPos.pos->y, thisPos.getSymbol());
 }
 
+//Inserting element at the tail of the list
 void objPosArrayList::insertTail(objPos thisPos)
 {
     if(listSize == arrayCapacity)
@@ -121,23 +129,28 @@ void objPosArrayList::removeHead()
 
 }
 
+//Removes tail element
 void objPosArrayList::removeTail()
 {   
     listSize--;
 }
         
+// Getter for the HeadElement
 objPos objPosArrayList::getHeadElement() const
 {
     return aList[0];
 }
 
+//Getter for the TailElement
 objPos objPosArrayList::getTailElement() const
 {
     return aList[listSize-1];
 }
 
+//Getter for element
 objPos objPosArrayList::getElement(int index) const
 {
+    //Checks if range is valid
     if (index < 0 || index>=listSize) {
         throw std::out_of_range("Out of range index\n");
     }
@@ -145,6 +158,7 @@ objPos objPosArrayList::getElement(int index) const
     return aList[index];
 }
 
+//Sets element at a specifed value
 void objPosArrayList::setElement(int i, objPos temp)
 {   
     aList[i].pos->x = temp.pos->x;
@@ -153,12 +167,12 @@ void objPosArrayList::setElement(int i, objPos temp)
 }
 
 
-
+//Adjusts array size
 void objPosArrayList::adjustArraySize()
 {
-    arrayCapacity*=2;
+    arrayCapacity*=2; 
     objPos* newList = new objPos[arrayCapacity];
-
+    //Copying to new array
     for(int i = 0; i<listSize; i++)
     {
         newList[i] = aList[i];
