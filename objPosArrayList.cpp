@@ -1,5 +1,8 @@
 #include "objPosArrayList.h"
 #include <iostream>
+#include <windows.h>
+
+
 
 // Paste your Tested implementation here.
 
@@ -7,8 +10,18 @@ objPosArrayList::objPosArrayList()
 {
     arrayCapacity = 200;
     aList = new objPos[arrayCapacity];
+    
+        
+}
 
-    listSize = 3;
+
+objPosArrayList::objPosArrayList(int size)
+{
+    //SetConsoleOutputCP(CP_UTF8);
+    arrayCapacity = 200;
+    aList = new objPos[arrayCapacity];
+
+    listSize = size;
     
     for(int i = 0; i<listSize; i++)
     {
@@ -16,6 +29,36 @@ objPosArrayList::objPosArrayList()
     }
     
         
+}
+
+objPosArrayList::objPosArrayList(const objPosArrayList &copy)
+{
+    arrayCapacity = copy.arrayCapacity;
+    aList = new objPos[arrayCapacity];
+
+    listSize = copy.listSize;
+
+    for(int i = 0; i<listSize; i++)
+    {
+        aList[i].getObjPos() = copy.getElement(i);
+    }
+
+}
+
+
+objPosArrayList &objPosArrayList::operator=(const objPosArrayList &copy)
+{
+    delete[] aList;
+
+    arrayCapacity = copy.arrayCapacity;
+    aList = new objPos[arrayCapacity];
+
+    listSize = copy.listSize;
+
+    for(int i = 0; i<listSize; i++)
+    {
+        aList[i].getObjPos() = copy.getElement(i);
+    }
 }
 
 objPosArrayList::~objPosArrayList()
@@ -98,6 +141,7 @@ void objPosArrayList::setElement(int i, objPos temp)
 {   
     aList[i].pos->x = temp.pos->x;
     aList[i].pos->y = temp.pos->y;
+    aList[i].symbol = temp.symbol;
 }
 
 

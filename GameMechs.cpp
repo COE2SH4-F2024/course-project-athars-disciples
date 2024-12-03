@@ -10,6 +10,7 @@ GameMechs::GameMechs()
     score = 0;
     exitFlag = false;
     loseFlag = false;
+    foodObject = new Food(); 
     
 }
 
@@ -20,6 +21,7 @@ GameMechs::GameMechs(int boardX, int boardY)
     score = 0;
     exitFlag = false;
     loseFlag = false;
+    foodObject = new Food(); 
 
     //Defining board
 
@@ -40,6 +42,11 @@ bool GameMechs::getLoseFlagStatus() const
 {
     return loseFlag;
 }
+
+bool GameMechs::getWinFlagStatus() const
+{
+    return true;
+}
     
 
 char GameMechs::getInput() const
@@ -53,9 +60,10 @@ int GameMechs::getScore() const
 }
 
 
-void GameMechs::incrementScore()
+
+void GameMechs::incrementScore(int scoreAdd)
 {
-    score++;
+    score+=scoreAdd;
 }
 
 int GameMechs::getBoardSizeX() const

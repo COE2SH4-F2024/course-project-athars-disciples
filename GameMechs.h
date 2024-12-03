@@ -16,18 +16,20 @@ class GameMechs
         char input;
         bool exitFlag;
         bool loseFlag;
+        bool winFlag;
         int score;
 
         int boardSizeX;
         int boardSizeY;
-        Food* foodObject = new Food();
+        Food* foodObject;
 
     public:
         GameMechs();
         GameMechs(int boardX, int boardY);
         ~GameMechs(); // is this one needed at all? Why or why not?
         
-        bool getExitFlagStatus() const; 
+        bool getExitFlagStatus() const;
+        bool getWinFlagStatus() const; 
         void setExit(bool value);
         bool getLoseFlagStatus() const;
         void setLoseFlag();
@@ -43,7 +45,7 @@ class GameMechs
         int getBoardSizeY() const;
         
         int getScore() const;
-        void incrementScore();
+        void incrementScore(int scoreAdd);
         
         // More methods should be added here
 };

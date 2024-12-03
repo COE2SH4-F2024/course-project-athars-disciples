@@ -12,7 +12,6 @@ class Player
     // Only some sample members are included here
 
     // You will include more data members and member functions to complete your design.
-
     
     public:
         enum Dir {UP, DOWN, LEFT, RIGHT, STOP};  // This is the direction state
@@ -27,13 +26,15 @@ class Player
         Dir getPlayerDir();
         void movePlayer();
         bool checkSelfCollision();
-        bool checkFoodCollision(int foodElement);
+        bool checkFoodCollision();
+        int getFoodIndex();
 
         // More methods to be added here
 
     private:
      // Upgrade this in iteration 3.       
         enum Dir myDir;
+        int foodIndex;
         objPosArrayList* playerPosList;
 
         // Need a reference to the Main Game Mechanisms

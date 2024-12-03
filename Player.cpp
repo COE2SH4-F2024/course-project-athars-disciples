@@ -5,10 +5,12 @@ Player::Player(GameMechs* thisGMRef)
 {
     mainGameMechsRef = thisGMRef;
     
-    playerPosList = new objPosArrayList();
+    playerPosList = new objPosArrayList(1);
     
     playerPosList->getHeadElement().pos->x = (mainGameMechsRef->getBoardSizeX())/2;
     playerPosList->getHeadElement().pos->y = (mainGameMechsRef->getBoardSizeY())/2;
+    foodIndex = 0;
+    
     myDir = STOP;
 
 
@@ -19,7 +21,7 @@ Player::Player(GameMechs* thisGMRef)
 Player::~Player()
 {
     // delete any heap members here
-    delete playerPosList;
+    delete[] playerPosList;
 }
 
 objPosArrayList* Player::getPlayerPos() const
@@ -50,27 +52,35 @@ void Player::updatePlayerDir()
         {                      
             case 'w':
             case 'W':
+            //case 72:
                 if (myDir == LEFT||myDir == RIGHT||myDir == STOP)
                     myDir = UP;
                     break;
                 
             case 's':
             case 'S':
+            //case 80:
                 if (myDir == LEFT||myDir == RIGHT||myDir == STOP)
                     myDir = DOWN;
                     break;
                 
             case 'a':
             case 'A':
+            //case 75:
                 if (myDir == UP||myDir == DOWN||myDir == STOP)
                     myDir = LEFT;
                     break;
 
             case 'd':
             case 'D':
+            //case 77:
                 if (myDir == UP||myDir == DOWN||myDir == STOP)
                     myDir = RIGHT;
                     break;
+            
+            case ' ':
+                mainGameMechsRef->setExit(true);
+                mainGameMechsRef->setLoseFlag();
             
 
             default:
@@ -152,6 +162,12 @@ void Player::movePlayer()
 
 bool Player::checkSelfCollision()
 {
+
+    if(playerPosList->getSize() == 1)
+    {
+        return false;
+    }
+    
     for(int i = 0; i<getPlayerPos()->getSize(); i++)
     {
         for(int j = 0; j<getPlayerPos()->getSize(); j++)
@@ -166,22 +182,30 @@ bool Player::checkSelfCollision()
             }
         }
     }
-
-    return false;
-    
 }
 
 
-bool Player::checkFoodCollision(int foodElement)
+bool Player::checkFoodCollision()
 {
+
     for(int i = 0; i<getPlayerPos()->getSize(); i++)
-    {
-        if(getPlayerPos()->getElement(i).pos->x == mainGameMechsRef->getFoodPosition(foodElement).pos->x
-        && getPlayerPos()->getElement(i).pos->y == mainGameMechsRef->getFoodPosition(foodElement).pos->y)
+    {   
+        for(int j = 0; j<mainGameMechsRef->getFood()->getAmountOfFood(); j++)
         {
-            return true;
+
+            if(getPlayerPos()->getElement(i).pos->x == mainGameMechsRef->getFood()->getFoodBucket()->getElement(j).pos->x
+            && getPlayerPos()->getElement(i).pos->y == mainGameMechsRef->getFood()->getFoodBucket()->getElement(j).pos->y)
+            {
+                foodIndex = j;
+                return true;
+            }
         }
     }
 
     return false;
+}
+
+int Player::getFoodIndex()
+{
+    return foodIndex;
 }
