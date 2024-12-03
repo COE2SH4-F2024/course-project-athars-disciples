@@ -78,7 +78,6 @@ void Player::updatePlayerDir()
             
             case ' ':
                 mainGameMechsRef->setExit(true);
-                mainGameMechsRef->setLoseFlag();
             
 
             default:
@@ -181,7 +180,7 @@ void Player::movePlayer()
             {
                 newHeadPosition.pos->y = 1;
             }
-            newHeadPosition.setSymbol('~');
+            newHeadPosition.setSymbol('^');
             playerPosList->insertHead(newHeadPosition);
             playerPosList->removeTail();
             break;
@@ -194,7 +193,7 @@ void Player::movePlayer()
                 newHeadPosition.pos->x = 1;
             
             }
-            newHeadPosition.setSymbol('>');
+            newHeadPosition.setSymbol('^');
             playerPosList->insertHead(newHeadPosition);
             playerPosList->removeTail();
             break;
@@ -206,7 +205,7 @@ void Player::movePlayer()
                 newHeadPosition.pos->x = upper_limit_x-2;
 
             }
-            newHeadPosition.setSymbol('<');
+            newHeadPosition.setSymbol('^');
             playerPosList->insertHead(newHeadPosition);
             playerPosList->removeTail();
             break;
@@ -296,7 +295,7 @@ void Player::checkFoodCollision()
                             mainGameMechsRef->incrementScore(30);
                             break;
                         case 'D':
-                            mainGameMechsRef->incrementScore(-30);
+                            mainGameMechsRef->incrementScore(-100);
                             for(int l = 0; l<3; l++)
                             {
                                 if(playerPosList->getSize() > 1)

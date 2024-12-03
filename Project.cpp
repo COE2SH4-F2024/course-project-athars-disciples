@@ -194,24 +194,10 @@ void DrawScreen(void)
                             {
                                 MacUILib_printf("⚪");
                             }
-                            else if(playercharacter->getPlayerPos()->getElement(j).symbol == '~')
-                            {
-                                MacUILib_printf("🡳");
-                            }
-
-                            else if(playercharacter->getPlayerPos()->getElement(j).symbol == '>')
-                            {
-                                MacUILib_printf("🡲");
-                            }
-
-                            else if(playercharacter->getPlayerPos()->getElement(j).symbol == '<')
-                            {
-                                MacUILib_printf("🡰");
-                            }
 
                             else if(playercharacter->getPlayerPos()->getElement(j).symbol == '^')
                             {
-                                MacUILib_printf("🡱");
+                                MacUILib_printf("🐍");
                             }
 
                             object_printed = true; 
@@ -276,7 +262,7 @@ void DrawScreen(void)
     MacUILib_printf("\nCurrent Size: %d", playercharacter->getPlayerPos()->getSize());
 
     //Displays guide to how items work
-    MacUILib_printf("\nFood Guide:\n🍎 = 10 points, Size Increase by 1\n🍐 = 20 points, Size Increase by 2\n🍒 = 30 points, No Size Increase\n🔥 = -30 points, Size Decrease by 3\n");
+    MacUILib_printf("\nFood Guide:\n🍎 = 10 points, Size Increase by 1\n🍐 = 20 points, Size Increase by 2\n🍒 = 30 points, No Size Increase\n🔥 = -100 points, Size Decrease by 3\n");
 
 
     //Checks if win condition is true and prints appropriate result

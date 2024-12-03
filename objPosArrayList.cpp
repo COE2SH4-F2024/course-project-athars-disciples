@@ -7,11 +7,13 @@ objPosArrayList::objPosArrayList()
 {
     //Initializing capacity
     arrayCapacity = 200;
-    //allocating memory
+    //allocating memory for the objPosArrayList
     aList = new objPos[arrayCapacity];
+
     //Initializing the list size
     listSize = 1;
-    //Setting the position and symbol
+
+    //Setting the position and symbol for the head
     aList[0].setObjPos(10, 10, '^');
         
 }
@@ -19,14 +21,15 @@ objPosArrayList::objPosArrayList()
 //Constructor for objPosArrayList class
 objPosArrayList::objPosArrayList(int size)
 {
-    //SetConsoleOutputCP(CP_UTF8);
+
     arrayCapacity = 200;
     aList = new objPos[arrayCapacity];
 
     listSize = size;
     
     aList[0].setObjPos(10, 10, '^');
-    //Initializing elements with positions and symbols
+
+    //Initializing elements with default body symbol
     for(int i = 1; i<listSize; i++)
     {
         aList[i].setObjPos(10, 10 + i, '*');
