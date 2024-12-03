@@ -27,11 +27,12 @@ class Food
 
         void generateFood(objPos blockOff, objPos* inputItem, int xRange, int yRange); //random food generation algorithm - ppa3
         void generateFoodBucket(objPosArrayList blockOff, int xRange, int yRange);
+        
        //Getter method for obtaining a copy of the current position of the food.
         objPosArrayList* getFoodBucket() const;
 
         int getAmountOfFood() const;
-        void decreaseFood();
+
 };
 
 #endif

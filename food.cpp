@@ -154,8 +154,3 @@ int Food::getAmountOfFood() const
     return numberOfFood;
 }
 
-//Decreases numberOfFood by 1
-void Food::decreaseFood()
-{
-    numberOfFood--;
-}

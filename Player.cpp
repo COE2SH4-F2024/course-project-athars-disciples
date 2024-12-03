@@ -234,8 +234,6 @@ bool Player::checkSelfCollision()
     {
         return false;
     }
-
-    
     
     for(int i = 0; i<getPlayerPos()->getSize(); i++)
     {
