@@ -31,6 +31,7 @@ class Food
         objPosArrayList* getFoodBucket() const;
 
         int getAmountOfFood() const;
+        void decreaseFood();
 };
 
 #endif

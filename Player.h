@@ -7,12 +7,7 @@
 
 class Player
 {
-    // Construct the remaining declaration from the project manual.
 
-    // Only some sample members are included here
-
-    // You will include more data members and member functions to complete your design.
-    
     public:
         enum Dir {UP, DOWN, LEFT, RIGHT, STOP};  // This is the direction state
 
@@ -21,21 +16,18 @@ class Player
         //Creation of destructor member function for player
         ~Player();
 
-        objPosArrayList* getPlayerPos() const; // Upgrade this in iteration 3.       
+        objPosArrayList* getPlayerPos() const;        
         void updatePlayerDir();
         Dir getPlayerDir();
         void movePlayer();
 
         bool checkSelfCollision();
-        bool checkFoodCollision();
-        //void setNewDirectionHead();
+        void checkFoodCollision();
+
 
         bool checkWinCondition();
         void insertPlayerTail();
-        //void processFoodCollide();
 
-
-        // More methods to be added here
 
     private:
          
