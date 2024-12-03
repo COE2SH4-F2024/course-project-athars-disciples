@@ -6,29 +6,25 @@
 
 #include "objPos.h"
 #include "objPosArrayList.h"
+#include "food.h"
 
 using namespace std;
 
 class GameMechs
 {
-    private:
-        char input;
-        bool exitFlag;
-        bool loseFlag;
-        int score;
-
-        int boardSizeX;
-        int boardSizeY;
-
-        objPos food;
+        
 
     public:
+        enum Difficulty {Start, Easy, Medium, Hard, Impossible};
+
         GameMechs();
         GameMechs(int boardX, int boardY);
-        ~GameMechs(); // is this one needed at all? Why or why not?
+        ~GameMechs(); 
         
-        bool getExitFlagStatus() const; 
-        void setExitTrue();
+        bool getExitFlagStatus() const;
+        bool getWinFlagStatus() const; 
+        void setExit(bool value);
+
         bool getLoseFlagStatus() const;
         void setLoseFlag();
 
@@ -36,13 +32,30 @@ class GameMechs
         void setInput(char this_input);
         void clearInput();
 
+        objPos getFoodPosition(int i);
+        Food* getFood();
+
         int getBoardSizeX() const;
         int getBoardSizeY() const;
         
         int getScore() const;
-        void incrementScore();
+        void incrementScore(int scoreAdd);
         
-        // More methods should be added here
+        void setDifficulty();
+        Difficulty getDifficulty();
+
+    private:
+        char input;
+        bool exitFlag;
+        bool loseFlag;
+        bool winFlag;
+        int score;
+
+        int boardSizeX;
+        int boardSizeY;
+        Food* foodObject;
+        enum Difficulty diff;
+
 };
 
 #endif
