@@ -31,7 +31,7 @@ void HideCursor() {
 GameMechs *gamemechanics = new GameMechs;
 
 //Initializing player character which takes in the gamemechanics pointer as reference
-Player playercharacter(gamemechanics); 
+Player* playercharacter = new Player(gamemechanics); 
 
 
 
@@ -80,16 +80,16 @@ void Initialize(void)
     gamemechanics->setExit(false);
 
     //Generating initial food positions within 'foodbucket' by utilizing the players existing position as a blockoff
-    gamemechanics->getFood()->generateFoodBucket(*(playercharacter.getPlayerPos()), gamemechanics->getBoardSizeX(), gamemechanics->getBoardSizeY());
+    gamemechanics->getFood()->generateFoodBucket(*(playercharacter->getPlayerPos()), gamemechanics->getBoardSizeX(), gamemechanics->getBoardSizeY());
 
 
     //Checking if initialized spawn position already defined is within the gameboard parameters
-    if(playercharacter.getPlayerPos()->getHeadElement().pos->x > gamemechanics->getBoardSizeX() 
-    || playercharacter.getPlayerPos()->getHeadElement().pos->x > gamemechanics->getBoardSizeX())
+    if(playercharacter->getPlayerPos()->getHeadElement().pos->x > gamemechanics->getBoardSizeX() 
+    || playercharacter->getPlayerPos()->getHeadElement().pos->x > gamemechanics->getBoardSizeX())
     {
         //Changing parameters to be within game parameters should the above be true
-        playercharacter.getPlayerPos()->getHeadElement().pos->x = (gamemechanics->getBoardSizeX())/2;
-        playercharacter.getPlayerPos()->getHeadElement().pos->y = (gamemechanics->getBoardSizeY())/2;
+        playercharacter->getPlayerPos()->getHeadElement().pos->x = (gamemechanics->getBoardSizeX())/2;
+        playercharacter->getPlayerPos()->getHeadElement().pos->y = (gamemechanics->getBoardSizeY())/2;
 
     }
 
@@ -123,10 +123,13 @@ void RunLogic(void)
     gamemechanics->setDifficulty();
 
     //Checking if the input is not null or spacebar (no need to update direction if nothing new is inputted or when exiting)
-    playercharacter.updatePlayerDir();
+    playercharacter->updatePlayerDir();
     
     //Moving the player as necessary and as dictated by the movePlayer function
-    playercharacter.movePlayer();
+    playercharacter->movePlayer();
+
+    //Checking food collision and applying necessary changes
+    playercharacter->checkFoodCollision();
 
     //Clearing the old input as it is no longer needed
     gamemechanics->clearInput(); 
@@ -141,8 +144,7 @@ void DrawScreen(void)
     int boardSizeY = gamemechanics->getBoardSizeY();
     int boardSizeX = gamemechanics->getBoardSizeX();
     bool object_printed = false;
-    playercharacter.checkFoodCollision();
-    bool foodCollide = playercharacter.checkFoodCollision();
+
     
 
     //Writing out initial text
@@ -165,7 +167,7 @@ void DrawScreen(void)
         MacUILib_printf("\nUse the WASD Keys to navigate and spacebar to exit\n\n");
 
         //Giving cue to player to begin by pressing WASD    
-        if(playercharacter.getPlayerDir() == Player::STOP)
+        if(playercharacter->getPlayerDir() == Player::STOP)
         {
             MacUILib_printf("\nClick any WASD key to start\n\n");
         }
@@ -178,47 +180,46 @@ void DrawScreen(void)
 
                 if((y==0||x==0||x==(boardSizeX-1)||y==(boardSizeY-1)) && !object_printed)
                 {
-                    MacUILib_printf("██");
+                    MacUILib_printf("▓▓");
                 }
                         
                 else
                 {    
-                    for(int j = 0; j<playercharacter.getPlayerPos()->getSize(); j++)
+                    for(int j = 0; j<playercharacter->getPlayerPos()->getSize(); j++)
                     {
-                        if((playercharacter.getPlayerPos()->getElement(j).pos->x == x) && (playercharacter.getPlayerPos()->getElement(j).pos->y == y))
+                        if((playercharacter->getPlayerPos()->getElement(j).pos->x == x) && (playercharacter->getPlayerPos()->getElement(j).pos->y == y))
                         {
-                            if(playercharacter.getPlayerPos()->getElement(j).symbol == '~')
+                            
+                            if(playercharacter->getPlayerPos()->getElement(j).symbol == '*')
+                            {
+                                MacUILib_printf("⚪");
+                            }
+                            else if(playercharacter->getPlayerPos()->getElement(j).symbol == '~')
                             {
                                 MacUILib_printf("🡳");
                             }
 
-                            else if(playercharacter.getPlayerPos()->getElement(j).symbol == '>')
+                            else if(playercharacter->getPlayerPos()->getElement(j).symbol == '>')
                             {
                                 MacUILib_printf("🡲");
                             }
 
-                            else if(playercharacter.getPlayerPos()->getElement(j).symbol == '<')
+                            else if(playercharacter->getPlayerPos()->getElement(j).symbol == '<')
                             {
                                 MacUILib_printf("🡰");
                             }
 
-                            else if(playercharacter.getPlayerPos()->getElement(j).symbol == '^')
+                            else if(playercharacter->getPlayerPos()->getElement(j).symbol == '^')
                             {
                                 MacUILib_printf("🡱");
                             }
-
-                            else if(playercharacter.getPlayerPos()->getElement(j).symbol == '*')
-                            {
-                                MacUILib_printf("⚪");
-                            }
-                                
 
                             object_printed = true; 
 
                         }
                     }
                     
-                    if(!foodCollide && !playercharacter.checkSelfCollision())
+                    if(!playercharacter->checkSelfCollision())
                     {
                         for(int m = 0; m<gamemechanics->getFood()->getAmountOfFood(); m++)
                         {
@@ -272,14 +273,14 @@ void DrawScreen(void)
 
     //Displays Current Score
     MacUILib_printf("\nCurrent Score: %d", gamemechanics->getScore());
-    MacUILib_printf("\nCurrent Size: %d", playercharacter.getPlayerPos()->getSize());
+    MacUILib_printf("\nCurrent Size: %d", playercharacter->getPlayerPos()->getSize());
 
     //Displays guide to how items work
     MacUILib_printf("\nFood Guide:\n🍎 = 10 points, Size Increase by 1\n🍐 = 20 points, Size Increase by 2\n🍒 = 30 points, No Size Increase\n🔥 = -30 points, Size Decrease by 3\n");
 
 
     //Checks if win condition is true and prints appropriate result
-    if(playercharacter.checkWinCondition())
+    if(playercharacter->checkWinCondition())
     {
         MacUILib_printf("\nCongratulations on Winning! Here is your reward: 🎂\n");
     }
@@ -287,7 +288,7 @@ void DrawScreen(void)
     //Checks if lose condition is true and prints appropriate results
     else if(gamemechanics->getExitFlagStatus() == true && gamemechanics->getLoseFlagStatus() == true)
     {
-        MacUILib_printf("\nCongratulations on Losing!\n");
+        MacUILib_printf("\nCongratulations on Losing! Try again next time 😅\n");
 
     }
 
@@ -315,14 +316,8 @@ void CleanUp(void)
     MacUILib_uninit();
 
     //Freeing up memory allocated for gamemechanics
+    delete[] playercharacter;
     delete[] gamemechanics;
 }
 
 
-
-
-
-//For all 5 of your elements 
-//Is the elements position valid? 
-//If yes, continue to the next element
-//If no, randomize x and y and check again for the element

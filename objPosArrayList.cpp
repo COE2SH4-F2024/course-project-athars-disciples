@@ -88,7 +88,12 @@ void objPosArrayList::insertHead(objPos thisPos)
     }
 
     for(int i = listSize; i>0; i--)
+    {
         aList[i] = aList[i-1];
+
+        //Setting all the other elements to the default symbol I chose
+        aList[i].setSymbol('*');
+    }
     
     listSize++;
     

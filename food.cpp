@@ -151,3 +151,8 @@ int Food::getAmountOfFood() const
 {
     return numberOfFood;
 }
+
+void Food::decreaseFood()
+{
+    numberOfFood--;
+}

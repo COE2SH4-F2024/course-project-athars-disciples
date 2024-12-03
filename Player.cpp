@@ -90,39 +90,6 @@ void Player::updatePlayerDir()
 
 }     
 
-/*void Player::setNewDirectionHead()
-{  
-
-        //Checking if the current direction of the player character is right
-        if(getPlayerDir() == Player::RIGHT)
-        {
-            //Changing the new positions x and y variables to match the existing direction and increase in direction of food eaten
-            playerPosList->getHeadElement().setSymbol('>');  
-        }
-
-        //Checking if the current direction of the player character is left
-        else if(getPlayerDir() == Player::LEFT)
-        {
-            //Changing the new positions x and y variables to match the existing direction and increase in direction of food eaten
-            playerPosList->getHeadElement().setSymbol('<');  
-        }
-
-        //Checking if the current direction of the player character is up or stop (player is assumed to be pointing up at beginning)
-        else if(getPlayerDir() == Player::UP|| getPlayerDir() == Player::STOP)
-        {
-            //Changing the new positions x and y variables to match the existing direction and increase in direction of food eaten       
-            playerPosList->getHeadElement().setSymbol('^');  
-        }
-
-        //Checking if the current direction of the player character is down
-        else if(getPlayerDir() == Player::DOWN)
-        {
-            //Changing the new positions x and y variables to match the existing direction and increase in direction of food eaten           
-            playerPosList->getHeadElement().setSymbol('~');  
-        }
-
-        //Insearting a new head using the new parameters stored in the newPosition objPos 
-}*/
 
 void Player::insertPlayerTail()
 {
@@ -294,7 +261,7 @@ bool Player::checkSelfCollision()
 }
 
 
-bool Player::checkFoodCollision()
+void Player::checkFoodCollision()
 {
     int size = getPlayerPos()->getSize();
 
@@ -323,6 +290,7 @@ bool Player::checkFoodCollision()
                         case 'B':
                             mainGameMechsRef->incrementScore(20);
                             insertPlayerTail();
+                            insertPlayerTail();
                             break;
                         case 'C':
                             mainGameMechsRef->incrementScore(30);
@@ -346,11 +314,8 @@ bool Player::checkFoodCollision()
                     mainGameMechsRef->getFood()->generateFoodBucket(*playerPosList, mainGameMechsRef->getBoardSizeX(), mainGameMechsRef->getBoardSizeY());
 
                 }
-                return true;
             }
         }
-
-    return false;
     }
 }
 
